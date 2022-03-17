@@ -674,10 +674,20 @@ private:
 
 } // namespace FBE
 
-namespace std {
+#if defined(FMT_VERSION)
+template <>
+struct fmt::formatter<FBE::decimal_t> : formatter<std::string_view>
+{
+    template <typename FormatContext>
+    auto format(const FBE::decimal_t& value, FormatContext& ctx) const
+    {
+        return formatter<string_view>::format((double)value, ctx);
+    }
+};
+#endif
 
 template <>
-struct hash<FBE::decimal_t>
+struct std::hash<FBE::decimal_t>
 {
     typedef FBE::decimal_t argument_type;
     typedef size_t result_type;
@@ -689,8 +699,6 @@ struct hash<FBE::decimal_t>
         return result;
     }
 };
-
-} // namespace std
 
 namespace FBE {
 )CODE";
@@ -941,10 +949,20 @@ private:
 
 } // namespace FBE
 
-namespace std {
+#if defined(FMT_VERSION)
+template <>
+struct fmt::formatter<FBE::uuid_t> : formatter<std::string_view>
+{
+    template <typename FormatContext>
+    auto format(const FBE::uuid_t& value, FormatContext& ctx) const
+    {
+        return formatter<string_view>::format(value.string(), ctx);
+    }
+};
+#endif
 
 template <>
-struct hash<FBE::uuid_t>
+struct std::hash<FBE::uuid_t>
 {
     typedef FBE::uuid_t argument_type;
     typedef size_t result_type;
@@ -958,8 +976,6 @@ struct hash<FBE::uuid_t>
         return result;
     }
 };
-
-} // namespace std
 
 namespace FBE {
 )CODE";
@@ -7215,6 +7231,12 @@ void GeneratorCpp::GenerateEnum(const std::shared_ptr<Package>& p, const std::sh
     WriteLine();
     WriteLineIndent("std::ostream& operator<<(std::ostream& stream, " + *e->name + " value);");
 
+    // Generate enum formatter declaration
+    WriteLine();
+    WriteLineIndent("#if defined(FMT_VERSION)");
+    WriteLineIndent("} template <> struct fmt::formatter<" + *p->name + "::" + *e->name + "> : ostream_formatter {}; namespace " + *p->name + " {");
+    WriteLineIndent("#endif");
+
     // Generate enum logging stream operator declaration
     WriteLine();
     WriteLineIndent("#if defined(LOGGING_PROTOCOL)");
@@ -7401,6 +7423,12 @@ void GeneratorCpp::GenerateFlags(const std::shared_ptr<Package>& p, const std::s
     // Generate flags output stream operator declaration
     WriteLine();
     WriteLineIndent("std::ostream& operator<<(std::ostream& stream, " + *f->name + " value);");
+
+    // Generate flags formatter declaration
+    WriteLine();
+    WriteLineIndent("#if defined(FMT_VERSION)");
+    WriteLineIndent("} template <> struct fmt::formatter<" + *p->name + "::" + *f->name + "> : ostream_formatter {}; namespace " + *p->name + " {");
+    WriteLineIndent("#endif");
 
     // Generate flags logging stream operator declaration
     WriteLine();
@@ -7692,6 +7720,9 @@ void GeneratorCpp::GenerateStruct_Header(const std::shared_ptr<Package>& p, cons
     // Generate namespace end
     WriteLine();
     WriteLineIndent("} // namespace " + *p->name);
+
+    // Generate struct formatter
+    GenerateStructFormatter(p, s);
 
     // Generate struct hash
     GenerateStructHash(p, s);
@@ -8136,16 +8167,21 @@ void GeneratorCpp::GenerateStructLoggingStream(const std::shared_ptr<Package>& p
     WriteLineIndent("#endif");
 }
 
+void GeneratorCpp::GenerateStructFormatter(const std::shared_ptr<Package>& p, const std::shared_ptr<StructType>& s)
+{
+    // Generate struct formatter
+    WriteLine();
+    WriteLineIndent("#if defined(FMT_VERSION)");
+    WriteLineIndent("template <> struct fmt::formatter<" + *p->name + "::" + *s->name + "> : ostream_formatter {};");
+    WriteLineIndent("#endif");
+}
+
 void GeneratorCpp::GenerateStructHash(const std::shared_ptr<Package>& p, const std::shared_ptr<StructType>& s)
 {
-    // Generate namespace begin
-    WriteLine();
-    WriteLineIndent("namespace std {");
-
     // Generate struct hash
     WriteLine();
     WriteLineIndent("template<>");
-    WriteLineIndent("struct hash<" + *p->name + "::" + *s->name + ">");
+    WriteLineIndent("struct std::hash<" + *p->name + "::" + *s->name + ">");
     WriteLineIndent("{");
     Indent(1);
     WriteLineIndent("typedef " + *p->name + "::" + *s->name + " argument_type;");
@@ -8166,10 +8202,6 @@ void GeneratorCpp::GenerateStructHash(const std::shared_ptr<Package>& p, const s
     WriteLineIndent("}");
     Indent(-1);
     WriteLineIndent("};");
-
-    // Generate namespace end
-    WriteLine();
-    WriteLineIndent("} // namespace std");
 }
 
 void GeneratorCpp::GenerateStructJson(const std::shared_ptr<Package>& p, const std::shared_ptr<StructType>& s)
@@ -10604,11 +10636,11 @@ std::string GeneratorCpp::ConvertOutputStreamType(const std::string& type, const
     else if ((type == "byte") || (type == "int8") || (type == "uint8"))
         return "(int)" + std::string(optional ? "*" : "") + wrapped_name;
     else if (type == "bytes")
-        return "\"bytes[\" << " + wrapped_name + std::string(optional ? "->" : ".") + "size() << \"]\"";
+        return "\"bytes[\" << " + name + std::string(optional ? "->" : ".") + "size() << \"]\"";
     else if (type == "char")
-        return "\"'\" << " + std::string(optional ? "*" : "") + wrapped_name + " << \"'\"";
+        return "\"'\" << " + std::string(optional ? "*" : "") + name + " << \"'\"";
     else if (type == "wchar")
-        return "\"'\" << static_cast<uint32_t>(" + std::string(optional ? "*" : "") + wrapped_name + ") << \"'\"";
+        return "\"'\" << (char)" + std::string(optional ? "*" : "") + name + " << \"'\"";
     else if ((type == "string") || (type == "uuid"))
         return "\"\\\"\" << " + std::string(optional ? "*" : "") + wrapped_name + " << \"\\\"\"";
     return std::string(optional ? "*" : "") + wrapped_name;

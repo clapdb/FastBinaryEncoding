@@ -1,12 +1,16 @@
 # Fast Binary Encoding (FBE)
 
 [![Awesome C++](https://awesome.re/badge.svg)](https://github.com/fffaraz/awesome-cpp)
-[![Linux build status](https://img.shields.io/travis/com/chronoxor/FastBinaryEncoding/master?label=Linux)](https://travis-ci.com/chronoxor/FastBinaryEncoding)
-[![OSX build status](https://img.shields.io/travis/com/chronoxor/FastBinaryEncoding/master?label=OSX)](https://travis-ci.com/chronoxor/FastBinaryEncoding)
-[![Cygwin build status](https://img.shields.io/appveyor/build/chronoxor/FastBinaryEncoding/master?label=Cygwin)](https://ci.appveyor.com/project/chronoxor/FastBinaryEncoding)
-[![MSYS2 build status](https://img.shields.io/appveyor/build/chronoxor/FastBinaryEncoding/master?label=MSYS2)](https://ci.appveyor.com/project/chronoxor/FastBinaryEncoding)
-[![MinGW build status](https://img.shields.io/appveyor/build/chronoxor/FastBinaryEncoding/master?label=MinGW)](https://ci.appveyor.com/project/chronoxor/FastBinaryEncoding)
-[![Windows build status](https://img.shields.io/appveyor/build/chronoxor/FastBinaryEncoding/master?label=Windows)](https://ci.appveyor.com/project/chronoxor/FastBinaryEncoding)
+<br/>
+[![Linux (clang)](https://github.com/chronoxor/FastBinaryEncoding/actions/workflows/build-linux-clang.yml/badge.svg)](https://github.com/chronoxor/FastBinaryEncoding/actions/workflows/build-linux-clang.yml)
+[![Linux (gcc)](https://github.com/chronoxor/FastBinaryEncoding/actions/workflows/build-linux-gcc.yml/badge.svg)](https://github.com/chronoxor/FastBinaryEncoding/actions/workflows/build-linux-gcc.yml)
+<br/>
+[![MacOS](https://github.com/chronoxor/FastBinaryEncoding/actions/workflows/build-macos.yml/badge.svg)](https://github.com/chronoxor/FastBinaryEncoding/actions/workflows/build-macos.yml)
+<br/>
+[![Windows (Cygwin)](https://github.com/chronoxor/FastBinaryEncoding/actions/workflows/build-windows-cygwin.yml/badge.svg)](https://github.com/chronoxor/FastBinaryEncoding/actions/workflows/build-windows-cygwin.yml)
+[![Windows (MSYS2)](https://github.com/chronoxor/FastBinaryEncoding/actions/workflows/build-windows-msys2.yml/badge.svg)](https://github.com/chronoxor/FastBinaryEncoding/actions/workflows/build-windows-msys2.yml)
+[![Windows (MinGW)](https://github.com/chronoxor/FastBinaryEncoding/actions/workflows/build-windows-mingw.yml/badge.svg)](https://github.com/chronoxor/FastBinaryEncoding/actions/workflows/build-windows-mingw.yml)
+[![Windows (Visual Studio)](https://github.com/chronoxor/FastBinaryEncoding/actions/workflows/build-windows-vs.yml/badge.svg)](https://github.com/chronoxor/FastBinaryEncoding/actions/workflows/build-windows-vs.yml)
 
 Fast Binary Encoding allows to describe any domain models, business
 objects, complex data structures, client/server requests & responses
@@ -71,7 +75,7 @@ Sample projects:
     * [Benchmark 3: Verify](#benchmark-3-verify)
 
 # Features
-* Cross platform (Linux, OSX, Windows)
+* Cross platform (Linux, MacOS, Windows)
 * [Generators for C++, C#, Go, Java, JavaScript, Kotlin, Python, Ruby, Swift](#generate-domain-model)
 * [Fast binary encoding format](documents/FBE.md)
 * [Supported base types (byte, bool, char, wchar, int8, int16, int32, int64, float, double)](documents/FBE.md#base-types)
@@ -85,9 +89,9 @@ Sample projects:
 * [Excellent performance](#performance-benchmarks)
 
 # Requirements
-* Linux (binutils-dev uuid-dev flex bison)
-* OSX (flex bison)
-* Windows 10
+* Linux
+* MacOS
+* Windows
 * [cmake](https://www.cmake.org)
 * [gcc](https://gcc.gnu.org)
 * [git](https://git-scm.com)
@@ -104,6 +108,21 @@ Optional:
 * [WinFlexBison](https://github.com/lexxmark/winflexbison)
 
 # How to build?
+
+### Linux: install required packages
+```shell
+sudo apt-get install -y binutils-dev uuid-dev flex bison
+```
+
+### MacOS: install required packages
+```shell
+brew install flex bison
+```
+
+### Windows: install required packages
+```shell
+choco install winflexbison3
+```
 
 ### Install [gil (git links) tool](https://github.com/chronoxor/gil)
 ```shell
@@ -123,7 +142,7 @@ cd build
 ./unix.sh
 ```
 
-### OSX
+### MacOS
 ```shell
 cd build
 ./unix.sh
