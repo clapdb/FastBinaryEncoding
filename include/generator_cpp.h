@@ -76,6 +76,7 @@ private:
     void GenerateImportsJson();
     void GenerateImportsJson(const std::shared_ptr<Package>& p);
     void GenerateUnalignedAccessor_Header();
+    void GenerateImportHelper_Header();
     void GenerateBufferWrapper_Header();
     void GenerateBufferWrapper_Source();
     void GenerateDecimalWrapper_Header();
@@ -98,6 +99,8 @@ private:
     void GenerateFBEFieldModelBytes_Source();
     void GenerateFBEFieldModelString_Header();
     void GenerateFBEFieldModelString_Source();
+    void GenerateFBEFieldModelPMRString_Header();
+    void GenerateFBEFieldModelPMRString_Source();
     void GenerateFBEFieldModelOptional_Header();
     void GenerateFBEFieldModelOptional_Inline();
     void GenerateFBEFieldModelStructOptional_Header();

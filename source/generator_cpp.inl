@@ -6,6 +6,8 @@
     \copyright MIT License
 */
 
+#include <iostream>
+
 namespace FBE {
 
 void GeneratorCpp::GenerateFBEPtr_Header(const CppCommon::Path& path)
@@ -1900,6 +1902,11 @@ void GeneratorCpp::GeneratePtrStruct_Header(const std::shared_ptr<Package>& p, c
     WriteLineIndent("namespace " + *p->name + " {");
 }
 
+auto is_current_package_type(const std::string& field_type, const std::string& delimiter = ".") -> bool {
+    auto found_delimiter = field_type.find(delimiter);
+    return found_delimiter == std::string::npos;
+}
+
 void GeneratorCpp::GeneratePtrStruct_Source(const std::shared_ptr<Package>& p, const std::shared_ptr<StructType>& s)
 {
     WriteLine();
@@ -1935,6 +1942,7 @@ void GeneratorCpp::GeneratePtrStruct_Source(const std::shared_ptr<Package>& p, c
     // Generate struct constructor with arena
     if (Arena()) {
         first = true;
+        WriteLine();
         WriteLineIndent(*s->name + "::" + *s->name + "([[maybe_unused]] allocator_type alloc)");
         Indent(1);
         if (s->base && !s->base->empty())
@@ -1942,11 +1950,18 @@ void GeneratorCpp::GeneratePtrStruct_Source(const std::shared_ptr<Package>& p, c
             WriteLineIndent(": " + ConvertPtrTypeName(*p->name, *s->base) + "()");
             first = false;
         }
+        // Since lack of context, we have no idea of whether other pkg's
+        // field is struct or not. So we have to handle it in body
+        std::vector<std::shared_ptr<StructField>> collection_of_import_pkg_field;
         if (s->body)
         {
             auto enums = p->body->enums;
             for (const auto& field : s->body->fields)
             {
+                if (!is_current_package_type(*field->type)) {
+                    collection_of_import_pkg_field.push_back(field);
+                    continue;
+                }
                 WriteIndent();
                 Write(std::string(first ? ": " : ", ") + *field->name + "(");
                 if (field->ptr && !IsContainerType(*field)) {
@@ -1968,7 +1983,18 @@ void GeneratorCpp::GeneratePtrStruct_Source(const std::shared_ptr<Package>& p, c
             }
         }
         Indent(-1);
-        WriteLineIndent("{}");
+        if (collection_of_import_pkg_field.size() == 0) {
+            WriteLineIndent("{}");
+        } else {
+            WriteLineIndent("{");
+            Indent(1);
+            for (const auto& field: collection_of_import_pkg_field) {
+                WriteLineIndent(*field->name + " = assign_member<" + ConvertTypeName(*p->name, *field->type, false) + ">(alloc);");
+            }
+            Indent(-1);
+            WriteLineIndent("}");
+
+        }
     }
 
     std::vector<std::string> unique_ptr_members;
@@ -3312,7 +3338,7 @@ GeneratorCpp::ConvertPtrTypeName(const std::string &package, const StructField &
     // bool typeptr = withptr ? field.ptr : false;
     bool typeptr = field.ptr;
     if (field.array)
-        return prefix + "::array<" + ConvertPtrTypeName(package, *field.type, field.optional, typeptr, as_argument) + ", " + std::to_string(field.N) + ">";
+        return "std::array<" + ConvertPtrTypeName(package, *field.type, field.optional, typeptr, as_argument) + ", " + std::to_string(field.N) + ">";
     else if (field.optional)
         return "std::optional<" + ConvertPtrTypeName(package, *field.type) + ">";
     else if (field.vector)
