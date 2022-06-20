@@ -5,8 +5,6 @@
     \date 20.04.2018
     \copyright MIT License
 */
-#include <iostream>
-
 #include "generator_cpp.h"
 
 namespace FBE {
@@ -10913,7 +10911,6 @@ std::string GeneratorCpp::ConvertTypeName(const std::string& package, const std:
         return "FBE::uuid_t";
 
     std::string result = type;
-    // std::cout << "result: "<< type << std::endl;
     bool pkg = !CppCommon::StringUtils::ReplaceAll(result, ".", "::");
     return (pkg ? ("::" + package) : "") + "::" + result;
 }
