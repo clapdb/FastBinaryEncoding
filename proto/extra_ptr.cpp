@@ -26,7 +26,7 @@ Info::Info(const std::string& arg_info, std::unique_ptr<::extra::Extra> arg_extr
         extras1.emplace_back(it.release());
 }
 
-Info::Info(Info&& other)
+Info::Info(Info&& other) noexcept
     : info(std::move(other.info))
     , extra(std::exchange(other.extra, nullptr))
     , extras(std::move(other.extras))
@@ -54,7 +54,7 @@ bool Info::operator<([[maybe_unused]] const Info& other) const noexcept
     return false;
 }
 
-Info& Info::operator=(Info&& other)
+Info& Info::operator=(Info&& other) noexcept
 {
     if (this != &other)
     {
@@ -133,7 +133,7 @@ Extra::Extra(int64_t arg_num, const std::string& arg_data, std::unique_ptr<::ext
         infopl.emplace_back(it.release());
 }
 
-Extra::Extra(Extra&& other)
+Extra::Extra(Extra&& other) noexcept
     : num(std::exchange(other.num, (int64_t)0ll))
     , data(std::move(other.data))
     , info(std::exchange(other.info, nullptr))
@@ -167,7 +167,7 @@ bool Extra::operator<([[maybe_unused]] const Extra& other) const noexcept
     return false;
 }
 
-Extra& Extra::operator=(Extra&& other)
+Extra& Extra::operator=(Extra&& other) noexcept
 {
     if (this != &other)
     {

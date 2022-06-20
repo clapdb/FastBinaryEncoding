@@ -36,7 +36,7 @@ Extra::Extra(const std::string& arg_name, const std::string& arg_detail, ::sa::S
     , flag(std::move(arg_flag))
 {}
 
-Extra::Extra(Extra&& other)
+Extra::Extra(Extra&& other) noexcept
     : name(std::move(other.name))
     , detail(std::move(other.detail))
     , sex(std::move(other.sex))
@@ -59,7 +59,7 @@ bool Extra::operator<([[maybe_unused]] const Extra& other) const noexcept
     return false;
 }
 
-Extra& Extra::operator=(Extra&& other)
+Extra& Extra::operator=(Extra&& other) noexcept
 {
     if (this != &other)
     {
@@ -105,7 +105,7 @@ Simple::Simple(const std::string& arg_name, int32_t arg_depth, std::array<::sa::
     , sex(std::move(arg_sex))
 {}
 
-Simple::Simple(Simple&& other)
+Simple::Simple(Simple&& other) noexcept
     : name(std::move(other.name))
     , depth(std::exchange(other.depth, (int32_t)0ll))
     , sa(std::move(other.sa))
@@ -128,7 +128,7 @@ bool Simple::operator<([[maybe_unused]] const Simple& other) const noexcept
     return false;
 }
 
-Simple& Simple::operator=(Simple&& other)
+Simple& Simple::operator=(Simple&& other) noexcept
 {
     if (this != &other)
     {
@@ -198,7 +198,7 @@ Complex::Complex(const std::string& arg_name, std::optional<::sa::Sex> arg_sex, 
     }
 }
 
-Complex::Complex(Complex&& other)
+Complex::Complex(Complex&& other) noexcept
     : name(std::move(other.name))
     , sex()
     , flag()
@@ -235,7 +235,7 @@ bool Complex::operator<([[maybe_unused]] const Complex& other) const noexcept
     return false;
 }
 
-Complex& Complex::operator=(Complex&& other)
+Complex& Complex::operator=(Complex&& other) noexcept
 {
     if (this != &other)
     {

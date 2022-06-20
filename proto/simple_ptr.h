@@ -46,11 +46,11 @@ struct Simple : FBE::Base
     Simple();
     Simple(const std::string& arg_info, std::unique_ptr<::simple::Simple> arg_simple, int32_t arg_depth, std::vector<std::unique_ptr<::simple::Simple>> arg_spv, std::vector<::simple::Simple> arg_sv, std::map<int32_t, std::unique_ptr<::simple::Simple>> arg_spm, std::map<int32_t, ::simple::Simple> arg_sm);
     Simple(const Simple& other) = delete;
-    Simple(Simple&& other);
-    ~Simple();
+    Simple(Simple&& other) noexcept;
+    ~Simple() override;
 
     Simple& operator=(const Simple& other) = delete;
-    Simple& operator=(Simple&& other);
+    Simple& operator=(Simple&& other) noexcept;
 
     bool operator==(const Simple& other) const noexcept;
     bool operator!=(const Simple& other) const noexcept { return !operator==(other); }

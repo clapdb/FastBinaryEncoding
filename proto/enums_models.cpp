@@ -154,7 +154,7 @@ size_t FieldModel<::enums::Enums>::fbe_extra() const noexcept
     if ((_buffer.offset() + fbe_offset() + fbe_size()) > _buffer.size())
         return 0;
 
-    uint32_t fbe_struct_offset = *((const uint32_t*)(_buffer.data() + _buffer.offset() + fbe_offset()));
+    uint32_t fbe_struct_offset = unaligned_load<uint32_t>(_buffer.data() + _buffer.offset() + fbe_offset());
     if ((fbe_struct_offset == 0) || ((_buffer.offset() + fbe_struct_offset + 4) > _buffer.size()))
         return 0;
 
@@ -239,15 +239,15 @@ bool FieldModel<::enums::Enums>::verify(bool fbe_verify_type) const noexcept
     if ((_buffer.offset() + fbe_offset() + fbe_size()) > _buffer.size())
         return true;
 
-    uint32_t fbe_struct_offset = *((const uint32_t*)(_buffer.data() + _buffer.offset() + fbe_offset()));
+    uint32_t fbe_struct_offset = unaligned_load<uint32_t>(_buffer.data() + _buffer.offset() + fbe_offset());
     if ((fbe_struct_offset == 0) || ((_buffer.offset() + fbe_struct_offset + 4 + 4) > _buffer.size()))
         return false;
 
-    uint32_t fbe_struct_size = *((const uint32_t*)(_buffer.data() + _buffer.offset() + fbe_struct_offset));
+    uint32_t fbe_struct_size = unaligned_load<uint32_t>(_buffer.data() + _buffer.offset() + fbe_struct_offset);
     if (fbe_struct_size < (4 + 4))
         return false;
 
-    uint32_t fbe_struct_type = *((const uint32_t*)(_buffer.data() + _buffer.offset() + fbe_struct_offset + 4));
+    uint32_t fbe_struct_type = unaligned_load<uint32_t>(_buffer.data() + _buffer.offset() + fbe_struct_offset + 4);
     if (fbe_verify_type && (fbe_struct_type != fbe_type()))
         return false;
 
@@ -665,12 +665,12 @@ size_t FieldModel<::enums::Enums>::get_begin() const noexcept
     if ((_buffer.offset() + fbe_offset() + fbe_size()) > _buffer.size())
         return 0;
 
-    uint32_t fbe_struct_offset = *((const uint32_t*)(_buffer.data() + _buffer.offset() + fbe_offset()));
+    uint32_t fbe_struct_offset = unaligned_load<uint32_t>(_buffer.data() + _buffer.offset() + fbe_offset());
     assert(((fbe_struct_offset > 0) && ((_buffer.offset() + fbe_struct_offset + 4 + 4) <= _buffer.size())) && "Model is broken!");
     if ((fbe_struct_offset == 0) || ((_buffer.offset() + fbe_struct_offset + 4 + 4) > _buffer.size()))
         return 0;
 
-    uint32_t fbe_struct_size = *((const uint32_t*)(_buffer.data() + _buffer.offset() + fbe_struct_offset));
+    uint32_t fbe_struct_size = unaligned_load<uint32_t>(_buffer.data() + _buffer.offset() + fbe_struct_offset);
     assert((fbe_struct_size >= (4 + 4)) && "Model is broken!");
     if (fbe_struct_size < (4 + 4))
         return 0;
@@ -690,7 +690,7 @@ void FieldModel<::enums::Enums>::get(::enums::Enums& fbe_value) const noexcept
     if (fbe_begin == 0)
         return;
 
-    uint32_t fbe_struct_size = *((const uint32_t*)(_buffer.data() + _buffer.offset()));
+    uint32_t fbe_struct_size = unaligned_load<uint32_t>(_buffer.data() + _buffer.offset());
     get_fields(fbe_value, fbe_struct_size);
     get_end(fbe_begin);
 }
@@ -1108,9 +1108,9 @@ size_t FieldModel<::enums::Enums>::set_begin()
     if ((fbe_struct_offset == 0) || ((_buffer.offset() + fbe_struct_offset + fbe_struct_size) > _buffer.size()))
         return 0;
 
-    *((uint32_t*)(_buffer.data() + _buffer.offset() + fbe_offset())) = fbe_struct_offset;
-    *((uint32_t*)(_buffer.data() + _buffer.offset() + fbe_struct_offset)) = fbe_struct_size;
-    *((uint32_t*)(_buffer.data() + _buffer.offset() + fbe_struct_offset + 4)) = (uint32_t)fbe_type();
+    unaligned_store<uint32_t>(_buffer.data() + _buffer.offset() + fbe_offset(), fbe_struct_offset);
+    unaligned_store<uint32_t>(_buffer.data() + _buffer.offset() + fbe_struct_offset, fbe_struct_size);
+    unaligned_store<uint32_t>(_buffer.data() + _buffer.offset() + fbe_struct_offset + 4, (uint32_t)fbe_type());
 
     _buffer.shift(fbe_struct_offset);
     return fbe_struct_offset;
@@ -1208,7 +1208,7 @@ bool EnumsModel::verify()
     if ((this->buffer().offset() + model.fbe_offset() - 4) > this->buffer().size())
         return false;
 
-    uint32_t fbe_full_size = *((const uint32_t*)(this->buffer().data() + this->buffer().offset() + model.fbe_offset() - 4));
+    uint32_t fbe_full_size = unaligned_load<uint32_t>(this->buffer().data() + this->buffer().offset() + model.fbe_offset() - 4);
     if (fbe_full_size < model.fbe_size())
         return false;
 
@@ -1242,7 +1242,7 @@ size_t EnumsModel::deserialize(::enums::Enums& value) const noexcept
     if ((this->buffer().offset() + model.fbe_offset() - 4) > this->buffer().size())
         return 0;
 
-    uint32_t fbe_full_size = *((const uint32_t*)(this->buffer().data() + this->buffer().offset() + model.fbe_offset() - 4));
+    uint32_t fbe_full_size = unaligned_load<uint32_t>(this->buffer().data() + this->buffer().offset() + model.fbe_offset() - 4);
     assert((fbe_full_size >= model.fbe_size()) && "Model is broken!");
     if (fbe_full_size < model.fbe_size())
         return 0;

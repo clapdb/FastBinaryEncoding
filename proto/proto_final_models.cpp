@@ -182,8 +182,8 @@ bool OrderFinalModel::verify()
     if ((this->buffer().offset() + _model.fbe_offset()) > this->buffer().size())
         return false;
 
-    size_t fbe_struct_size = *((const uint32_t*)(this->buffer().data() + this->buffer().offset() + _model.fbe_offset() - 8));
-    size_t fbe_struct_type = *((const uint32_t*)(this->buffer().data() + this->buffer().offset() + _model.fbe_offset() - 4));
+    size_t fbe_struct_size = unaligned_load<uint32_t>(this->buffer().data() + this->buffer().offset() + _model.fbe_offset() - 8);
+    size_t fbe_struct_type = unaligned_load<uint32_t>(this->buffer().data() + this->buffer().offset() + _model.fbe_offset() - 4);
     if ((fbe_struct_size == 0) || (fbe_struct_type != fbe_type()))
         return false;
 
@@ -216,8 +216,8 @@ size_t OrderFinalModel::deserialize(::proto::Order& value) const noexcept
     if ((this->buffer().offset() + _model.fbe_offset()) > this->buffer().size())
         return 0;
 
-    size_t fbe_struct_size = *((const uint32_t*)(this->buffer().data() + this->buffer().offset() + _model.fbe_offset() - 8));
-    size_t fbe_struct_type = *((const uint32_t*)(this->buffer().data() + this->buffer().offset() + _model.fbe_offset() - 4));
+    size_t fbe_struct_size = unaligned_load<uint32_t>(this->buffer().data() + this->buffer().offset() + _model.fbe_offset() - 8);
+    size_t fbe_struct_type = unaligned_load<uint32_t>(this->buffer().data() + this->buffer().offset() + _model.fbe_offset() - 4);
     assert(((fbe_struct_size > 0) && (fbe_struct_type == fbe_type())) && "Model is broken!");
     if ((fbe_struct_size == 0) || (fbe_struct_type != fbe_type()))
         return 8;
@@ -330,8 +330,8 @@ bool BalanceFinalModel::verify()
     if ((this->buffer().offset() + _model.fbe_offset()) > this->buffer().size())
         return false;
 
-    size_t fbe_struct_size = *((const uint32_t*)(this->buffer().data() + this->buffer().offset() + _model.fbe_offset() - 8));
-    size_t fbe_struct_type = *((const uint32_t*)(this->buffer().data() + this->buffer().offset() + _model.fbe_offset() - 4));
+    size_t fbe_struct_size = unaligned_load<uint32_t>(this->buffer().data() + this->buffer().offset() + _model.fbe_offset() - 8);
+    size_t fbe_struct_type = unaligned_load<uint32_t>(this->buffer().data() + this->buffer().offset() + _model.fbe_offset() - 4);
     if ((fbe_struct_size == 0) || (fbe_struct_type != fbe_type()))
         return false;
 
@@ -364,8 +364,8 @@ size_t BalanceFinalModel::deserialize(::proto::Balance& value) const noexcept
     if ((this->buffer().offset() + _model.fbe_offset()) > this->buffer().size())
         return 0;
 
-    size_t fbe_struct_size = *((const uint32_t*)(this->buffer().data() + this->buffer().offset() + _model.fbe_offset() - 8));
-    size_t fbe_struct_type = *((const uint32_t*)(this->buffer().data() + this->buffer().offset() + _model.fbe_offset() - 4));
+    size_t fbe_struct_size = unaligned_load<uint32_t>(this->buffer().data() + this->buffer().offset() + _model.fbe_offset() - 8);
+    size_t fbe_struct_type = unaligned_load<uint32_t>(this->buffer().data() + this->buffer().offset() + _model.fbe_offset() - 4);
     assert(((fbe_struct_size > 0) && (fbe_struct_type == fbe_type())) && "Model is broken!");
     if ((fbe_struct_size == 0) || (fbe_struct_type != fbe_type()))
         return 8;
@@ -550,8 +550,8 @@ bool AccountFinalModel::verify()
     if ((this->buffer().offset() + _model.fbe_offset()) > this->buffer().size())
         return false;
 
-    size_t fbe_struct_size = *((const uint32_t*)(this->buffer().data() + this->buffer().offset() + _model.fbe_offset() - 8));
-    size_t fbe_struct_type = *((const uint32_t*)(this->buffer().data() + this->buffer().offset() + _model.fbe_offset() - 4));
+    size_t fbe_struct_size = unaligned_load<uint32_t>(this->buffer().data() + this->buffer().offset() + _model.fbe_offset() - 8);
+    size_t fbe_struct_type = unaligned_load<uint32_t>(this->buffer().data() + this->buffer().offset() + _model.fbe_offset() - 4);
     if ((fbe_struct_size == 0) || (fbe_struct_type != fbe_type()))
         return false;
 
@@ -584,8 +584,8 @@ size_t AccountFinalModel::deserialize(::proto::Account& value) const noexcept
     if ((this->buffer().offset() + _model.fbe_offset()) > this->buffer().size())
         return 0;
 
-    size_t fbe_struct_size = *((const uint32_t*)(this->buffer().data() + this->buffer().offset() + _model.fbe_offset() - 8));
-    size_t fbe_struct_type = *((const uint32_t*)(this->buffer().data() + this->buffer().offset() + _model.fbe_offset() - 4));
+    size_t fbe_struct_size = unaligned_load<uint32_t>(this->buffer().data() + this->buffer().offset() + _model.fbe_offset() - 8);
+    size_t fbe_struct_type = unaligned_load<uint32_t>(this->buffer().data() + this->buffer().offset() + _model.fbe_offset() - 4);
     assert(((fbe_struct_size > 0) && (fbe_struct_type == fbe_type())) && "Model is broken!");
     if ((fbe_struct_size == 0) || (fbe_struct_type != fbe_type()))
         return 8;
@@ -680,8 +680,8 @@ bool OrderMessageFinalModel::verify()
     if ((this->buffer().offset() + _model.fbe_offset()) > this->buffer().size())
         return false;
 
-    size_t fbe_struct_size = *((const uint32_t*)(this->buffer().data() + this->buffer().offset() + _model.fbe_offset() - 8));
-    size_t fbe_struct_type = *((const uint32_t*)(this->buffer().data() + this->buffer().offset() + _model.fbe_offset() - 4));
+    size_t fbe_struct_size = unaligned_load<uint32_t>(this->buffer().data() + this->buffer().offset() + _model.fbe_offset() - 8);
+    size_t fbe_struct_type = unaligned_load<uint32_t>(this->buffer().data() + this->buffer().offset() + _model.fbe_offset() - 4);
     if ((fbe_struct_size == 0) || (fbe_struct_type != fbe_type()))
         return false;
 
@@ -714,8 +714,8 @@ size_t OrderMessageFinalModel::deserialize(::proto::OrderMessage& value) const n
     if ((this->buffer().offset() + _model.fbe_offset()) > this->buffer().size())
         return 0;
 
-    size_t fbe_struct_size = *((const uint32_t*)(this->buffer().data() + this->buffer().offset() + _model.fbe_offset() - 8));
-    size_t fbe_struct_type = *((const uint32_t*)(this->buffer().data() + this->buffer().offset() + _model.fbe_offset() - 4));
+    size_t fbe_struct_size = unaligned_load<uint32_t>(this->buffer().data() + this->buffer().offset() + _model.fbe_offset() - 8);
+    size_t fbe_struct_type = unaligned_load<uint32_t>(this->buffer().data() + this->buffer().offset() + _model.fbe_offset() - 4);
     assert(((fbe_struct_size > 0) && (fbe_struct_type == fbe_type())) && "Model is broken!");
     if ((fbe_struct_size == 0) || (fbe_struct_type != fbe_type()))
         return 8;
@@ -810,8 +810,8 @@ bool BalanceMessageFinalModel::verify()
     if ((this->buffer().offset() + _model.fbe_offset()) > this->buffer().size())
         return false;
 
-    size_t fbe_struct_size = *((const uint32_t*)(this->buffer().data() + this->buffer().offset() + _model.fbe_offset() - 8));
-    size_t fbe_struct_type = *((const uint32_t*)(this->buffer().data() + this->buffer().offset() + _model.fbe_offset() - 4));
+    size_t fbe_struct_size = unaligned_load<uint32_t>(this->buffer().data() + this->buffer().offset() + _model.fbe_offset() - 8);
+    size_t fbe_struct_type = unaligned_load<uint32_t>(this->buffer().data() + this->buffer().offset() + _model.fbe_offset() - 4);
     if ((fbe_struct_size == 0) || (fbe_struct_type != fbe_type()))
         return false;
 
@@ -844,8 +844,8 @@ size_t BalanceMessageFinalModel::deserialize(::proto::BalanceMessage& value) con
     if ((this->buffer().offset() + _model.fbe_offset()) > this->buffer().size())
         return 0;
 
-    size_t fbe_struct_size = *((const uint32_t*)(this->buffer().data() + this->buffer().offset() + _model.fbe_offset() - 8));
-    size_t fbe_struct_type = *((const uint32_t*)(this->buffer().data() + this->buffer().offset() + _model.fbe_offset() - 4));
+    size_t fbe_struct_size = unaligned_load<uint32_t>(this->buffer().data() + this->buffer().offset() + _model.fbe_offset() - 8);
+    size_t fbe_struct_type = unaligned_load<uint32_t>(this->buffer().data() + this->buffer().offset() + _model.fbe_offset() - 4);
     assert(((fbe_struct_size > 0) && (fbe_struct_type == fbe_type())) && "Model is broken!");
     if ((fbe_struct_size == 0) || (fbe_struct_type != fbe_type()))
         return 8;
@@ -940,8 +940,8 @@ bool AccountMessageFinalModel::verify()
     if ((this->buffer().offset() + _model.fbe_offset()) > this->buffer().size())
         return false;
 
-    size_t fbe_struct_size = *((const uint32_t*)(this->buffer().data() + this->buffer().offset() + _model.fbe_offset() - 8));
-    size_t fbe_struct_type = *((const uint32_t*)(this->buffer().data() + this->buffer().offset() + _model.fbe_offset() - 4));
+    size_t fbe_struct_size = unaligned_load<uint32_t>(this->buffer().data() + this->buffer().offset() + _model.fbe_offset() - 8);
+    size_t fbe_struct_type = unaligned_load<uint32_t>(this->buffer().data() + this->buffer().offset() + _model.fbe_offset() - 4);
     if ((fbe_struct_size == 0) || (fbe_struct_type != fbe_type()))
         return false;
 
@@ -974,8 +974,8 @@ size_t AccountMessageFinalModel::deserialize(::proto::AccountMessage& value) con
     if ((this->buffer().offset() + _model.fbe_offset()) > this->buffer().size())
         return 0;
 
-    size_t fbe_struct_size = *((const uint32_t*)(this->buffer().data() + this->buffer().offset() + _model.fbe_offset() - 8));
-    size_t fbe_struct_type = *((const uint32_t*)(this->buffer().data() + this->buffer().offset() + _model.fbe_offset() - 4));
+    size_t fbe_struct_size = unaligned_load<uint32_t>(this->buffer().data() + this->buffer().offset() + _model.fbe_offset() - 8);
+    size_t fbe_struct_type = unaligned_load<uint32_t>(this->buffer().data() + this->buffer().offset() + _model.fbe_offset() - 4);
     assert(((fbe_struct_size > 0) && (fbe_struct_type == fbe_type())) && "Model is broken!");
     if ((fbe_struct_size == 0) || (fbe_struct_type != fbe_type()))
         return 8;

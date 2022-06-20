@@ -3,6 +3,9 @@
 //
 
 #include "catch2/catch.hpp"
+#include "extra_ptr.h"
+#include "osa.h"
+#include "pkg_ptr.h"
 #include "sa_ptr.h"
 #include "test.h"
 
@@ -10,6 +13,7 @@
 #include "../proto/extra_ptr_models.h"
 #include "../proto/sa_ptr_models.h"
 #include "../proto/osa_models.h"
+#include "../proto/pkg_ptr_models.h"
 #include <memory>
 #include <utility>
 
@@ -385,4 +389,65 @@ TEST_CASE("Serialization (optional)", "[Ptr-based FBE]") {
     REQUIRE(c1_copy.extra->flag == ::sa::MyFLags::flag2);
     REQUIRE(c1_copy.nums.size() == 1);
     REQUIRE(c1_copy.nums[0] == 123);
+}
+
+
+TEST_CASE("Serialization (ptr-based import templated-based fbe)", "[Ptr-based FBE]") {
+    ::osa::Extra extra(std::string("extra"), "detail", ::osa::Sex::male, ::osa::MyFLags::flag1);
+
+    ::pkg::Info&& pkg_info = {
+        "pkg_info", ::osa::Sex::male, ::osa::MyFLags::flag2,  std::move(extra)
+    };
+
+    FBE::pkg::InfoModel info_writer;
+    size_t serialized_info = info_writer.serialize(pkg_info);
+    REQUIRE(serialized_info == info_writer.buffer().size());
+    REQUIRE(info_writer.verify());
+
+    FBE::pkg::InfoModel info_reader;
+    info_reader.attach(info_writer.buffer());
+    REQUIRE(info_reader.verify());
+
+    ::pkg::Info pkg_info_copy;
+    size_t deserialized_info = info_reader.deserialize(pkg_info_copy);
+    REQUIRE(deserialized_info == info_reader.buffer().size());
+    assert(info_reader.verify());
+
+    REQUIRE(pkg_info_copy.info == pkg_info.info);
+    REQUIRE(pkg_info_copy.sex == pkg_info_copy.sex);
+    REQUIRE(pkg_info_copy.flag == pkg_info.flag);
+    REQUIRE(pkg_info_copy.extra.name == pkg_info.extra.name);
+    REQUIRE(pkg_info_copy.extra.detail == pkg_info.extra.detail);
+    REQUIRE(pkg_info_copy.extra.sex == pkg_info.extra.sex);
+    REQUIRE(pkg_info_copy.extra.flag == pkg_info.extra.flag);
+
+    ::pkg::Detail detail;
+    detail.extram.emplace(1, std::move(pkg_info.extra));
+    detail.extrav.emplace_back(std::move(pkg_info_copy.extra));
+
+    FBE::pkg::DetailModel detail_writer;
+    size_t serialized_detail = detail_writer.serialize(detail);
+    REQUIRE(serialized_detail == detail_writer.buffer().size());
+    REQUIRE(detail_writer.verify());
+
+    FBE::pkg::DetailModel detail_reader;
+    detail_reader.attach(detail_writer.buffer());
+    REQUIRE(detail_reader.verify());
+
+    ::pkg::Detail detail_copy;
+    size_t deserialized_detail = detail_reader.deserialize(detail_copy);
+    REQUIRE(deserialized_detail == detail_reader.buffer().size());
+    assert(detail_reader.verify());
+
+    REQUIRE(detail_copy.extram.size() == 1);
+    REQUIRE(detail_copy.extram.at(1).name == "extra");
+    REQUIRE(detail_copy.extram.at(1).detail == "detail");
+    REQUIRE(detail_copy.extram.at(1).sex == ::osa::Sex::male);
+    REQUIRE(detail_copy.extram.at(1).flag == ::osa::MyFLags::flag1);
+
+    REQUIRE(detail_copy.extrav.size() == 1);
+    REQUIRE(detail_copy.extrav.at(0).name == "extra");
+    REQUIRE(detail_copy.extrav.at(0).detail == "detail");
+    REQUIRE(detail_copy.extrav.at(0).sex == ::osa::Sex::male);
+    REQUIRE(detail_copy.extrav.at(0).flag == ::osa::MyFLags::flag1);
 }

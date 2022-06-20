@@ -146,8 +146,8 @@ bool ExtraFinalModel::verify()
     if ((this->buffer().offset() + _model.fbe_offset()) > this->buffer().size())
         return false;
 
-    size_t fbe_struct_size = *((const uint32_t*)(this->buffer().data() + this->buffer().offset() + _model.fbe_offset() - 8));
-    size_t fbe_struct_type = *((const uint32_t*)(this->buffer().data() + this->buffer().offset() + _model.fbe_offset() - 4));
+    size_t fbe_struct_size = unaligned_load<uint32_t>(this->buffer().data() + this->buffer().offset() + _model.fbe_offset() - 8);
+    size_t fbe_struct_type = unaligned_load<uint32_t>(this->buffer().data() + this->buffer().offset() + _model.fbe_offset() - 4);
     if ((fbe_struct_size == 0) || (fbe_struct_type != fbe_type()))
         return false;
 
@@ -180,8 +180,8 @@ size_t ExtraFinalModel::deserialize(::osa::Extra& value) const noexcept
     if ((this->buffer().offset() + _model.fbe_offset()) > this->buffer().size())
         return 0;
 
-    size_t fbe_struct_size = *((const uint32_t*)(this->buffer().data() + this->buffer().offset() + _model.fbe_offset() - 8));
-    size_t fbe_struct_type = *((const uint32_t*)(this->buffer().data() + this->buffer().offset() + _model.fbe_offset() - 4));
+    size_t fbe_struct_size = unaligned_load<uint32_t>(this->buffer().data() + this->buffer().offset() + _model.fbe_offset() - 8);
+    size_t fbe_struct_type = unaligned_load<uint32_t>(this->buffer().data() + this->buffer().offset() + _model.fbe_offset() - 4);
     assert(((fbe_struct_size > 0) && (fbe_struct_type == fbe_type())) && "Model is broken!");
     if ((fbe_struct_size == 0) || (fbe_struct_type != fbe_type()))
         return 8;
@@ -330,8 +330,8 @@ bool SimpleFinalModel::verify()
     if ((this->buffer().offset() + _model.fbe_offset()) > this->buffer().size())
         return false;
 
-    size_t fbe_struct_size = *((const uint32_t*)(this->buffer().data() + this->buffer().offset() + _model.fbe_offset() - 8));
-    size_t fbe_struct_type = *((const uint32_t*)(this->buffer().data() + this->buffer().offset() + _model.fbe_offset() - 4));
+    size_t fbe_struct_size = unaligned_load<uint32_t>(this->buffer().data() + this->buffer().offset() + _model.fbe_offset() - 8);
+    size_t fbe_struct_type = unaligned_load<uint32_t>(this->buffer().data() + this->buffer().offset() + _model.fbe_offset() - 4);
     if ((fbe_struct_size == 0) || (fbe_struct_type != fbe_type()))
         return false;
 
@@ -364,8 +364,8 @@ size_t SimpleFinalModel::deserialize(::osa::Simple& value) const noexcept
     if ((this->buffer().offset() + _model.fbe_offset()) > this->buffer().size())
         return 0;
 
-    size_t fbe_struct_size = *((const uint32_t*)(this->buffer().data() + this->buffer().offset() + _model.fbe_offset() - 8));
-    size_t fbe_struct_type = *((const uint32_t*)(this->buffer().data() + this->buffer().offset() + _model.fbe_offset() - 4));
+    size_t fbe_struct_size = unaligned_load<uint32_t>(this->buffer().data() + this->buffer().offset() + _model.fbe_offset() - 8);
+    size_t fbe_struct_type = unaligned_load<uint32_t>(this->buffer().data() + this->buffer().offset() + _model.fbe_offset() - 4);
     assert(((fbe_struct_size > 0) && (fbe_struct_type == fbe_type())) && "Model is broken!");
     if ((fbe_struct_size == 0) || (fbe_struct_type != fbe_type()))
         return 8;

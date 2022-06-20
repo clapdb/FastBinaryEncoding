@@ -63,9 +63,9 @@ size_t FinalModel<decimal_t>::get(decimal_t& value) const noexcept
     const double ds2to64 = 1.8446744073709552e+019;
 
     // Read decimal parts
-    uint64_t low = *((const uint64_t*)(_buffer.data() + _buffer.offset() + fbe_offset()));
-    uint32_t high = *((const uint32_t*)(_buffer.data() + _buffer.offset() + fbe_offset() + 8));
-    uint32_t flags = *((const uint32_t*)(_buffer.data() + _buffer.offset() + fbe_offset() + 12));
+    uint64_t low = unaligned_load<uint64_t>(_buffer.data() + _buffer.offset() + fbe_offset());
+    uint32_t high = unaligned_load<uint32_t>(_buffer.data() + _buffer.offset() + fbe_offset() + 8);
+    uint32_t flags = unaligned_load<uint32_t>(_buffer.data() + _buffer.offset() + fbe_offset() + 12);
 
     // Calculate decimal value
     double dValue = ((double)low + (double)high * ds2to64) / pow(10.0, (uint8_t)(flags >> 16));
@@ -280,7 +280,7 @@ size_t FinalModel<buffer_t>::verify() const noexcept
     if ((_buffer.offset() + fbe_offset() + 4) > _buffer.size())
         return std::numeric_limits<std::size_t>::max();
 
-    uint32_t fbe_bytes_size = *((const uint32_t*)(_buffer.data() + _buffer.offset() + fbe_offset()));
+    uint32_t fbe_bytes_size = unaligned_load<uint32_t>(_buffer.data() + _buffer.offset() + fbe_offset());
     if ((_buffer.offset() + fbe_offset() + 4 + fbe_bytes_size) > _buffer.size())
         return std::numeric_limits<std::size_t>::max();
 
@@ -297,7 +297,7 @@ size_t FinalModel<buffer_t>::get(void* data, size_t size) const noexcept
     if ((_buffer.offset() + fbe_offset() + 4) > _buffer.size())
         return 0;
 
-    uint32_t fbe_bytes_size = *((const uint32_t*)(_buffer.data() + _buffer.offset() + fbe_offset()));
+    uint32_t fbe_bytes_size = unaligned_load<uint32_t>(_buffer.data() + _buffer.offset() + fbe_offset());
     assert(((_buffer.offset() + fbe_offset() + 4 + fbe_bytes_size) <= _buffer.size()) && "Model is broken!");
     if ((_buffer.offset() + fbe_offset() + 4 + fbe_bytes_size) > _buffer.size())
         return 4;
@@ -315,7 +315,7 @@ size_t FinalModel<buffer_t>::get(std::vector<uint8_t>& value) const noexcept
     if ((_buffer.offset() + fbe_offset() + 4) > _buffer.size())
         return 0;
 
-    uint32_t fbe_bytes_size = *((const uint32_t*)(_buffer.data() + _buffer.offset() + fbe_offset()));
+    uint32_t fbe_bytes_size = unaligned_load<uint32_t>(_buffer.data() + _buffer.offset() + fbe_offset());
     assert(((_buffer.offset() + fbe_offset() + 4 + fbe_bytes_size) <= _buffer.size()) && "Model is broken!");
     if ((_buffer.offset() + fbe_offset() + 4 + fbe_bytes_size) > _buffer.size())
         return 4;
@@ -351,7 +351,7 @@ size_t FinalModel<std::string>::verify() const noexcept
     if ((_buffer.offset() + fbe_offset() + 4) > _buffer.size())
         return std::numeric_limits<std::size_t>::max();
 
-    uint32_t fbe_string_size = *((const uint32_t*)(_buffer.data() + _buffer.offset() + fbe_offset()));
+    uint32_t fbe_string_size = unaligned_load<uint32_t>(_buffer.data() + _buffer.offset() + fbe_offset());
     if ((_buffer.offset() + fbe_offset() + 4 + fbe_string_size) > _buffer.size())
         return std::numeric_limits<std::size_t>::max();
 
@@ -368,7 +368,7 @@ size_t FinalModel<std::string>::get(char* data, size_t size) const noexcept
     if ((_buffer.offset() + fbe_offset() + 4) > _buffer.size())
         return 0;
 
-    uint32_t fbe_string_size = *((const uint32_t*)(_buffer.data() + _buffer.offset() + fbe_offset()));
+    uint32_t fbe_string_size = unaligned_load<uint32_t>(_buffer.data() + _buffer.offset() + fbe_offset());
     assert(((_buffer.offset() + fbe_offset() + 4 + fbe_string_size) <= _buffer.size()) && "Model is broken!");
     if ((_buffer.offset() + fbe_offset() + 4 + fbe_string_size) > _buffer.size())
         return 4;
@@ -386,7 +386,7 @@ size_t FinalModel<std::string>::get(std::string& value) const noexcept
     if ((_buffer.offset() + fbe_offset() + 4) > _buffer.size())
         return 0;
 
-    uint32_t fbe_string_size = *((const uint32_t*)(_buffer.data() + _buffer.offset() + fbe_offset()));
+    uint32_t fbe_string_size = unaligned_load<uint32_t>(_buffer.data() + _buffer.offset() + fbe_offset());
     assert(((_buffer.offset() + fbe_offset() + 4 + fbe_string_size) <= _buffer.size()) && "Model is broken!");
     if ((_buffer.offset() + fbe_offset() + 4 + fbe_string_size) > _buffer.size())
         return 4;

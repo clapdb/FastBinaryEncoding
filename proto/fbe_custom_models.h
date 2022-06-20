@@ -111,20 +111,23 @@ public:
     void get(std::array<TStruct, S>& values) const noexcept;
     template <size_t S>
     void get(std::array<TStruct*, S>& values) const noexcept;
-    // Get the array as std::vector
-    void get(std::vector<TStruct>& values) const noexcept;
-    void get(std::vector<TStruct*>& values) const noexcept;
 
     // Set the array as C-array
     template <size_t S>
     void set(const TStruct (&values)[S]) noexcept;
     template <size_t S>
     void set(const TStruct* (&values)[S]) noexcept;
+    
     // Set the array as std::array
     template <size_t S>
     void set(const std::array<TStruct, S>& values) noexcept;
     template <size_t S>
     void set(const std::array<TStruct*, S>& values) noexcept;
+
+    // Get the array as std::vector
+    void get(std::vector<TStruct>& values) const noexcept;
+    void get(std::vector<TStruct*>& values) const noexcept;
+
     // Set the array as std::vector
     void set(const std::vector<TStruct>& values) noexcept;
     void set(const std::vector<TStruct*>& values) noexcept;

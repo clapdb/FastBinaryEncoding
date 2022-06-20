@@ -20,7 +20,8 @@ inline size_t FinalModelBase<T, TBase>::get(T& value) const noexcept
     if ((_buffer.offset() + fbe_offset() + fbe_size()) > _buffer.size())
         return 0;
 
-    value = (T)(*((const TBase*)(_buffer.data() + _buffer.offset() + fbe_offset())));
+    value = unaligned_load<T>(_buffer.data() + _buffer.offset() + fbe_offset());
+
     return fbe_size();
 }
 
@@ -306,7 +307,7 @@ inline size_t FinalModelVector<T>::verify() const noexcept
     if ((_buffer.offset() + fbe_offset() + 4) > _buffer.size())
         return std::numeric_limits<std::size_t>::max();
 
-    uint32_t fbe_vector_size = *((const uint32_t*)(_buffer.data() + _buffer.offset() + fbe_offset()));
+    uint32_t fbe_vector_size = unaligned_load<uint32_t>(_buffer.data() + _buffer.offset() + fbe_offset());
 
     size_t size = 4;
     FinalModel<T> fbe_model(_buffer, fbe_offset() + 4);
@@ -330,7 +331,7 @@ inline size_t FinalModelVector<T>::get(std::vector<T>& values) const noexcept
     if ((_buffer.offset() + fbe_offset() + 4) > _buffer.size())
         return 0;
 
-    size_t fbe_vector_size = *((const uint32_t*)(_buffer.data() + _buffer.offset() + fbe_offset()));
+    size_t fbe_vector_size = unaligned_load<uint32_t>(_buffer.data() + _buffer.offset() + fbe_offset());
     if (fbe_vector_size == 0)
         return 4;
 
@@ -358,7 +359,7 @@ inline size_t FinalModelVector<T>::get(std::list<T>& values) const noexcept
     if ((_buffer.offset() + fbe_offset() + 4) > _buffer.size())
         return 0;
 
-    size_t fbe_vector_size = *((const uint32_t*)(_buffer.data() + _buffer.offset() + fbe_offset()));
+    size_t fbe_vector_size = unaligned_load<uint32_t>(_buffer.data() + _buffer.offset() + fbe_offset());
     if (fbe_vector_size == 0)
         return 4;
 
@@ -384,7 +385,7 @@ inline size_t FinalModelVector<T>::get(std::set<T>& values) const noexcept
     if ((_buffer.offset() + fbe_offset() + 4) > _buffer.size())
         return 0;
 
-    size_t fbe_vector_size = *((const uint32_t*)(_buffer.data() + _buffer.offset() + fbe_offset()));
+    size_t fbe_vector_size = unaligned_load<uint32_t>(_buffer.data() + _buffer.offset() + fbe_offset());
     if (fbe_vector_size == 0)
         return 4;
 
@@ -495,7 +496,7 @@ inline size_t FinalModelMap<TKey, TValue>::verify() const noexcept
     if ((_buffer.offset() + fbe_offset() + 4) > _buffer.size())
         return std::numeric_limits<std::size_t>::max();
 
-    uint32_t fbe_map_size = *((const uint32_t*)(_buffer.data() + _buffer.offset() + fbe_offset()));
+    uint32_t fbe_map_size = unaligned_load<uint32_t>(_buffer.data() + _buffer.offset() + fbe_offset());
 
     size_t size = 4;
     FinalModel<TKey> fbe_model_key(_buffer, fbe_offset() + 4);
@@ -527,7 +528,7 @@ inline size_t FinalModelMap<TKey, TValue>::get(std::map<TKey, TValue>& values) c
     if ((_buffer.offset() + fbe_offset() + 4) > _buffer.size())
         return 0;
 
-    size_t fbe_map_size = *((const uint32_t*)(_buffer.data() + _buffer.offset() + fbe_offset()));
+    size_t fbe_map_size = unaligned_load<uint32_t>(_buffer.data() + _buffer.offset() + fbe_offset());
     if (fbe_map_size == 0)
         return 4;
 
@@ -559,7 +560,7 @@ inline size_t FinalModelMap<TKey, TValue>::get(std::unordered_map<TKey, TValue>&
     if ((_buffer.offset() + fbe_offset() + 4) > _buffer.size())
         return 0;
 
-    size_t fbe_map_size = *((const uint32_t*)(_buffer.data() + _buffer.offset() + fbe_offset()));
+    size_t fbe_map_size = unaligned_load<uint32_t>(_buffer.data() + _buffer.offset() + fbe_offset());
     if (fbe_map_size == 0)
         return 4;
 

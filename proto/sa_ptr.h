@@ -68,11 +68,11 @@ struct Extra : FBE::Base
     Extra();
     Extra(const std::string& arg_name, const std::string& arg_detail, ::sa::Sex&& arg_sex, ::sa::MyFLags&& arg_flag);
     Extra(const Extra& other) = delete;
-    Extra(Extra&& other);
-    ~Extra();
+    Extra(Extra&& other) noexcept;
+    ~Extra() override;
 
     Extra& operator=(const Extra& other) = delete;
-    Extra& operator=(Extra&& other);
+    Extra& operator=(Extra&& other) noexcept;
 
     bool operator==(const Extra& other) const noexcept;
     bool operator!=(const Extra& other) const noexcept { return !operator==(other); }
@@ -122,11 +122,11 @@ struct Simple : FBE::Base
     Simple();
     Simple(const std::string& arg_name, int32_t arg_depth, std::array<::sa::Extra, 1> arg_sa, ::sa::Sex&& arg_sex);
     Simple(const Simple& other) = delete;
-    Simple(Simple&& other);
-    ~Simple();
+    Simple(Simple&& other) noexcept;
+    ~Simple() override;
 
     Simple& operator=(const Simple& other) = delete;
-    Simple& operator=(Simple&& other);
+    Simple& operator=(Simple&& other) noexcept;
 
     bool operator==(const Simple& other) const noexcept;
     bool operator!=(const Simple& other) const noexcept { return !operator==(other); }
@@ -177,11 +177,11 @@ struct Complex : FBE::Base
     Complex();
     Complex(const std::string& arg_name, std::optional<::sa::Sex> arg_sex, std::optional<::sa::MyFLags> arg_flag, std::optional<::sa::Extra> arg_extra, std::vector<int64_t> arg_nums);
     Complex(const Complex& other) = delete;
-    Complex(Complex&& other);
-    ~Complex();
+    Complex(Complex&& other) noexcept;
+    ~Complex() override;
 
     Complex& operator=(const Complex& other) = delete;
-    Complex& operator=(Complex&& other);
+    Complex& operator=(Complex&& other) noexcept;
 
     bool operator==(const Complex& other) const noexcept;
     bool operator!=(const Complex& other) const noexcept { return !operator==(other); }
