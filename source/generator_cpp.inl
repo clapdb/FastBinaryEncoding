@@ -1989,7 +1989,7 @@ void GeneratorCpp::GeneratePtrStruct_Source(const std::shared_ptr<Package>& p, c
             WriteLineIndent("{");
             Indent(1);
             for (const auto& field: collection_of_import_pkg_field) {
-                WriteLineIndent(*field->name + " = assign_member<" + ConvertTypeName(*p->name, *field->type, false) + ">(alloc);");
+                WriteLineIndent(*field->name + " = assign_member<" + ConvertTypeName(*p->name, *field) + ">(alloc);");
             }
             Indent(-1);
             WriteLineIndent("}");
