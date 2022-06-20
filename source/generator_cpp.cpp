@@ -1683,7 +1683,7 @@ void FieldModel<decimal_t>::get(decimal_t& value, decimal_t defaults) const noex
     const double ds2to64 = 1.8446744073709552e+019;
 
     // Read decimal parts
-    uint64_t low = unaligned_load<uint32_t>(_buffer.data() + _buffer.offset() + fbe_offset());
+    uint64_t low = unaligned_load<uint64_t>(_buffer.data() + _buffer.offset() + fbe_offset());
     uint32_t high = unaligned_load<uint32_t>(_buffer.data() + _buffer.offset() + fbe_offset() + 8);
     uint32_t flags = unaligned_load<uint32_t>(_buffer.data() + _buffer.offset() + fbe_offset() + 12);
 
@@ -3938,7 +3938,7 @@ size_t FinalModel<decimal_t>::get(decimal_t& value) const noexcept
     const double ds2to64 = 1.8446744073709552e+019;
 
     // Read decimal parts
-    uint64_t low = unaligned_load<uint32_t>(_buffer.data() + _buffer.offset() + fbe_offset());
+    uint64_t low = unaligned_load<uint64_t>(_buffer.data() + _buffer.offset() + fbe_offset());
     uint32_t high = unaligned_load<uint32_t>(_buffer.data() + _buffer.offset() + fbe_offset() + 8);
     uint32_t flags = unaligned_load<uint32_t>(_buffer.data() + _buffer.offset() + fbe_offset() + 12);
 
