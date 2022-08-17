@@ -1,9 +1,4 @@
 var searchData=
 [
-  ['write_661',['Write',['../class_f_b_e_1_1_generator.html#ae55fd80c0b9d0ef6190a2887d84f2639',1,'FBE::Generator']]],
-  ['writebegin_662',['WriteBegin',['../class_f_b_e_1_1_generator.html#a037a8f7b1c2f6df995bea922ded418d8',1,'FBE::Generator']]],
-  ['writeend_663',['WriteEnd',['../class_f_b_e_1_1_generator.html#aed2498685efcd442908c0c8e62fa0c8a',1,'FBE::Generator']]],
-  ['writeindent_664',['WriteIndent',['../class_f_b_e_1_1_generator.html#af7140aa26c3e38d967d8c4ae31963a37',1,'FBE::Generator::WriteIndent()'],['../class_f_b_e_1_1_generator.html#aa906b53274f2768bef7cb4b9c3f5ff75',1,'FBE::Generator::WriteIndent(const std::string &amp;str)']]],
-  ['writeline_665',['WriteLine',['../class_f_b_e_1_1_generator.html#a9cddebdbffb75de7aca0c6a54cad4729',1,'FBE::Generator::WriteLine()'],['../class_f_b_e_1_1_generator.html#a872432c6fddf6e35f19911bf6cf494f8',1,'FBE::Generator::WriteLine(const std::string &amp;str)']]],
-  ['writelineindent_666',['WriteLineIndent',['../class_f_b_e_1_1_generator.html#ab3b100edfa26f498801b910bbd4b49bd',1,'FBE::Generator']]]
+  ['version_234',['Version',['../struct_f_b_e_1_1_version.html#ae2b1d0e5a6bfbc6718cd6f6d4f62ac4d',1,'FBE::Version::Version()=default'],['../struct_f_b_e_1_1_version.html#a97dcc94bdd0ec98f14ffb59ca1aef00b',1,'FBE::Version::Version(const std::string &amp;v)'],['../class_f_b_e_1_1_generator_java.html#ab1d6ac3883e4bfa3e3c0f2526b751c6f',1,'FBE::GeneratorJava::Version() const noexcept'],['../class_f_b_e_1_1_generator_java.html#ab9ced9483b71011502cc353621bf1850',1,'FBE::GeneratorJava::Version(int v) noexcept'],['../class_f_b_e_1_1_generator_kotlin.html#a6dcf38a5a5b4d30ab1199775285e20c9',1,'FBE::GeneratorKotlin::Version() const noexcept'],['../class_f_b_e_1_1_generator_kotlin.html#ac3babbc30e49a85706168802581c2fa7',1,'FBE::GeneratorKotlin::Version(int v) noexcept']]]
 ];
