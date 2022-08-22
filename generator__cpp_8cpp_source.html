@@ -1013,12 +1013,12 @@ $(function() {
 <div class="line"><a name="l00971"></a><span class="lineno">  971</span>&#160;<span class="stringliteral"></span> </div>
 <div class="line"><a name="l00972"></a><span class="lineno">  972</span>&#160;<span class="stringliteral">#if defined(FMT_VERSION)</span></div>
 <div class="line"><a name="l00973"></a><span class="lineno">  973</span>&#160;<span class="stringliteral">template &lt;&gt;</span></div>
-<div class="line"><a name="l00974"></a><span class="lineno">  974</span>&#160;<span class="stringliteral">struct fmt::formatter&lt;FBE::decimal_t&gt; : formatter&lt;std::string_view&gt;</span></div>
+<div class="line"><a name="l00974"></a><span class="lineno">  974</span>&#160;<span class="stringliteral">struct fmt::formatter&lt;FBE::decimal_t&gt; : formatter&lt;fmt::string_view&gt;</span></div>
 <div class="line"><a name="l00975"></a><span class="lineno">  975</span>&#160;<span class="stringliteral">{</span></div>
 <div class="line"><a name="l00976"></a><span class="lineno">  976</span>&#160;<span class="stringliteral">    template &lt;typename FormatContext&gt;</span></div>
 <div class="line"><a name="l00977"></a><span class="lineno">  977</span>&#160;<span class="stringliteral">    auto format(const FBE::decimal_t&amp; value, FormatContext&amp; ctx) const</span></div>
 <div class="line"><a name="l00978"></a><span class="lineno">  978</span>&#160;<span class="stringliteral">    {</span></div>
-<div class="line"><a name="l00979"></a><span class="lineno">  979</span>&#160;<span class="stringliteral">        return formatter&lt;string_view&gt;::format((double)value, ctx);</span></div>
+<div class="line"><a name="l00979"></a><span class="lineno">  979</span>&#160;<span class="stringliteral">        return formatter&lt;fmt::string_view&gt;::format((double)value, ctx);</span></div>
 <div class="line"><a name="l00980"></a><span class="lineno">  980</span>&#160;<span class="stringliteral">    }</span></div>
 <div class="line"><a name="l00981"></a><span class="lineno">  981</span>&#160;<span class="stringliteral">};</span></div>
 <div class="line"><a name="l00982"></a><span class="lineno">  982</span>&#160;<span class="stringliteral">#endif</span></div>
@@ -1255,12 +1255,12 @@ $(function() {
 <div class="line"><a name="l01246"></a><span class="lineno"> 1246</span>&#160;<span class="stringliteral"></span> </div>
 <div class="line"><a name="l01247"></a><span class="lineno"> 1247</span>&#160;<span class="stringliteral">#if defined(FMT_VERSION)</span></div>
 <div class="line"><a name="l01248"></a><span class="lineno"> 1248</span>&#160;<span class="stringliteral">template &lt;&gt;</span></div>
-<div class="line"><a name="l01249"></a><span class="lineno"> 1249</span>&#160;<span class="stringliteral">struct fmt::formatter&lt;FBE::uuid_t&gt; : formatter&lt;std::string_view&gt;</span></div>
+<div class="line"><a name="l01249"></a><span class="lineno"> 1249</span>&#160;<span class="stringliteral">struct fmt::formatter&lt;FBE::uuid_t&gt; : formatter&lt;fmt::string_view&gt;</span></div>
 <div class="line"><a name="l01250"></a><span class="lineno"> 1250</span>&#160;<span class="stringliteral">{</span></div>
 <div class="line"><a name="l01251"></a><span class="lineno"> 1251</span>&#160;<span class="stringliteral">    template &lt;typename FormatContext&gt;</span></div>
 <div class="line"><a name="l01252"></a><span class="lineno"> 1252</span>&#160;<span class="stringliteral">    auto format(const FBE::uuid_t&amp; value, FormatContext&amp; ctx) const</span></div>
 <div class="line"><a name="l01253"></a><span class="lineno"> 1253</span>&#160;<span class="stringliteral">    {</span></div>
-<div class="line"><a name="l01254"></a><span class="lineno"> 1254</span>&#160;<span class="stringliteral">        return formatter&lt;string_view&gt;::format(value.string(), ctx);</span></div>
+<div class="line"><a name="l01254"></a><span class="lineno"> 1254</span>&#160;<span class="stringliteral">        return formatter&lt;fmt::string_view&gt;::format(value.string(), ctx);</span></div>
 <div class="line"><a name="l01255"></a><span class="lineno"> 1255</span>&#160;<span class="stringliteral">    }</span></div>
 <div class="line"><a name="l01256"></a><span class="lineno"> 1256</span>&#160;<span class="stringliteral">};</span></div>
 <div class="line"><a name="l01257"></a><span class="lineno"> 1257</span>&#160;<span class="stringliteral">#endif</span></div>
@@ -10131,7 +10131,7 @@ $(function() {
 <div class="line"><a name="l10124"></a><span class="lineno">10124</span>&#160;    <a class="code" href="class_f_b_e_1_1_generator.html#a9cddebdbffb75de7aca0c6a54cad4729">WriteLine</a>();</div>
 <div class="line"><a name="l10125"></a><span class="lineno">10125</span>&#160; </div>
 <div class="line"><a name="l10126"></a><span class="lineno">10126</span>&#160;    <span class="comment">// Generate struct final model get_fields() method</span></div>
-<div class="line"><a name="l10127"></a><span class="lineno">10127</span>&#160;    <a class="code" href="class_f_b_e_1_1_generator.html#ab3b100edfa26f498801b910bbd4b49bd">WriteLineIndent</a>(<span class="stringliteral">&quot;size_t &quot;</span> + model_name + <span class="stringliteral">&quot;::get_fields(&quot;</span> + struct_name + <span class="stringliteral">&quot;&amp; fbe_value) const noexcept&quot;</span>);</div>
+<div class="line"><a name="l10127"></a><span class="lineno">10127</span>&#160;    <a class="code" href="class_f_b_e_1_1_generator.html#ab3b100edfa26f498801b910bbd4b49bd">WriteLineIndent</a>(<span class="stringliteral">&quot;size_t &quot;</span> + model_name + <span class="stringliteral">&quot;::get_fields([[maybe_unused]] &quot;</span> + struct_name + <span class="stringliteral">&quot;&amp; fbe_value) const noexcept&quot;</span>);</div>
 <div class="line"><a name="l10128"></a><span class="lineno">10128</span>&#160;    <a class="code" href="class_f_b_e_1_1_generator.html#ab3b100edfa26f498801b910bbd4b49bd">WriteLineIndent</a>(<span class="stringliteral">&quot;{&quot;</span>);</div>
 <div class="line"><a name="l10129"></a><span class="lineno">10129</span>&#160;    <a class="code" href="class_f_b_e_1_1_generator.html#af359602bb4cc0a2332ae2082a25616cf">Indent</a>(1);</div>
 <div class="line"><a name="l10130"></a><span class="lineno">10130</span>&#160;    <span class="keywordflow">if</span> ((s-&gt;base &amp;&amp; !s-&gt;base-&gt;empty()) || (s-&gt;body &amp;&amp; !s-&gt;body-&gt;fields.empty()))</div>
@@ -10180,7 +10180,7 @@ $(function() {
 <div class="line"><a name="l10173"></a><span class="lineno">10173</span>&#160;    <a class="code" href="class_f_b_e_1_1_generator.html#a9cddebdbffb75de7aca0c6a54cad4729">WriteLine</a>();</div>
 <div class="line"><a name="l10174"></a><span class="lineno">10174</span>&#160; </div>
 <div class="line"><a name="l10175"></a><span class="lineno">10175</span>&#160;    <span class="comment">// Generate struct final model set_fields() method</span></div>
-<div class="line"><a name="l10176"></a><span class="lineno">10176</span>&#160;    <a class="code" href="class_f_b_e_1_1_generator.html#ab3b100edfa26f498801b910bbd4b49bd">WriteLineIndent</a>(<span class="stringliteral">&quot;size_t &quot;</span> + model_name + <span class="stringliteral">&quot;::set_fields(const &quot;</span> + struct_name + <span class="stringliteral">&quot;&amp; fbe_value) noexcept&quot;</span>);</div>
+<div class="line"><a name="l10176"></a><span class="lineno">10176</span>&#160;    <a class="code" href="class_f_b_e_1_1_generator.html#ab3b100edfa26f498801b910bbd4b49bd">WriteLineIndent</a>(<span class="stringliteral">&quot;size_t &quot;</span> + model_name + <span class="stringliteral">&quot;::set_fields([[maybe_unused]] const &quot;</span> + struct_name + <span class="stringliteral">&quot;&amp; fbe_value) noexcept&quot;</span>);</div>
 <div class="line"><a name="l10177"></a><span class="lineno">10177</span>&#160;    <a class="code" href="class_f_b_e_1_1_generator.html#ab3b100edfa26f498801b910bbd4b49bd">WriteLineIndent</a>(<span class="stringliteral">&quot;{&quot;</span>);</div>
 <div class="line"><a name="l10178"></a><span class="lineno">10178</span>&#160;    <a class="code" href="class_f_b_e_1_1_generator.html#af359602bb4cc0a2332ae2082a25616cf">Indent</a>(1);</div>
 <div class="line"><a name="l10179"></a><span class="lineno">10179</span>&#160;    <span class="keywordflow">if</span> ((s-&gt;base &amp;&amp; !s-&gt;base-&gt;empty()) || (s-&gt;body &amp;&amp; !s-&gt;body-&gt;fields.empty()))</div>
