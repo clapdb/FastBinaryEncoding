@@ -9359,6 +9359,8 @@ void GeneratorCpp::GenerateStruct_Source(const std::shared_ptr<Package>& p, cons
                 Write(std::string(first ? ": " : ", ") + *field->name + "(");
                 if (field->optional) {
                     Write("std::nullopt");
+                } else if (!IsCurrentPackageType(*field->type)) {
+                    Write(std::string("assign_member<") + ConvertTypeName(*p->name, *field) + ">(alloc)");
                 } else if (*field->type == "string") {
                 } else if (*field->type == "bytes" || IsContainerType(*field)) {
                     Write("alloc");

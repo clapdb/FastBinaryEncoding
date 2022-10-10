@@ -1,3 +1,11 @@
-package arena_test
+package arena_ptr
 
-import arena_common_ptr
+import arena_common
+
+struct Line {
+  arena_common.Expression expression;
+}
+
+struct Line2 {
+  bytes bytes_v;
+}

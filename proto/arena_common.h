@@ -55,14 +55,14 @@ CppLogging::Record& operator<<(CppLogging::Record& record, Optr value);
 struct Alias;
 struct Expression;
 
-using Expr = std::variant<bool, int32_t, std::pmr::string>;
+using Expr = std::variant<bool, int32_t, stdb::memory::arena_string>;
 std::ostream& operator<<(std::ostream& stream, [[maybe_unused]] const Expr& value);
 
 struct Alias
 {
     ArenaManagedCreateOnlyTag;
 
-    std::pmr::string name;
+    stdb::memory::arena_string name;
     ::arena_common::Optr optr;
     ::arena_common::Expr expr;
 
@@ -70,7 +70,7 @@ struct Alias
 
     Alias();
     explicit Alias(allocator_type alloc);
-    Alias(const std::pmr::string& arg_name, const ::arena_common::Optr& arg_optr, const ::arena_common::Expr& arg_expr);
+    Alias(const stdb::memory::arena_string& arg_name, const ::arena_common::Optr& arg_optr, const ::arena_common::Expr& arg_expr);
     Alias(const Alias& other) = default;
     Alias(Alias&& other) = default;
     ~Alias() = default;
@@ -118,7 +118,7 @@ struct Expression
 {
     ArenaManagedCreateOnlyTag;
 
-    std::pmr::vector<std::pmr::string> keys;
+    std::pmr::vector<stdb::memory::arena_string> keys;
     std::pmr::vector<::arena_common::Alias> aliases;
     std::pmr::map<int32_t, ::arena_common::Alias> alias_int;
 
@@ -126,7 +126,7 @@ struct Expression
 
     Expression();
     explicit Expression(allocator_type alloc);
-    Expression(const std::pmr::vector<std::pmr::string>& arg_keys, const std::pmr::vector<::arena_common::Alias>& arg_aliases, const std::pmr::map<int32_t, ::arena_common::Alias>& arg_alias_int);
+    Expression(const std::pmr::vector<stdb::memory::arena_string>& arg_keys, const std::pmr::vector<::arena_common::Alias>& arg_aliases, const std::pmr::map<int32_t, ::arena_common::Alias>& arg_alias_int);
     Expression(const Expression& other) = default;
     Expression(Expression&& other) = default;
     ~Expression() = default;

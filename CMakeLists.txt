@@ -208,7 +208,7 @@ if(NOT FBEC_MODULE)
     set(FBE_TARGET "${FBE_FILE}_PTR_TARGET")
     add_custom_command(
       OUTPUT ${FBE_OUTPUT_FILE}
-      COMMAND $<TARGET_FILE:fbec> --cpp --import-ptr --ptr --input ${FBE_INPUT_FILE} --output ${FBE_OUTPUT_DIR} --arena
+      COMMAND $<TARGET_FILE:fbec> --cpp --ptr --input ${FBE_INPUT_FILE} --output ${FBE_OUTPUT_DIR} --arena
       DEPENDS ${FBE_INPUT_FILE} COMMENT "Generating FBE proto for ${FBE_INPUT_FILE}..." VERBATIM
     )
     add_custom_target(${FBE_TARGET} DEPENDS ${FBE_OUTPUT_FILE})
@@ -242,7 +242,7 @@ if(NOT FBEC_MODULE)
   add_library(proto ${PROTO_HEADER_FILES} ${PROTO_INLINE_FILES} ${PROTO_SOURCE_FILES})
   set_target_properties(proto PROPERTIES COMPILE_FLAGS "${PEDANTIC_COMPILE_FLAGS}" FOLDER "libraries")
   target_include_directories(proto PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/proto"  ${memory})
-  target_link_libraries(proto ${LINKLIBS})
+  target_link_libraries(proto ${LINKLIBS} arena xxhash)
   list(APPEND INSTALL_TARGETS proto)
   list(APPEND LINKLIBS proto)
 
