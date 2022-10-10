@@ -80,6 +80,15 @@ struct KeyWriter<TWriter, stdb::memory::string>
     }
 };
 
+template <class TWriter>
+struct KeyWriter<TWriter, stdb::memory::arena_string>
+{
+    static bool to_json_key(TWriter& writer, const stdb::memory::arena_string& key)
+    {
+        return writer.Key(key.c_str());
+    }
+};
+
 template <class TWriter, size_t N>
 struct KeyWriter<TWriter, char[N]>
 {
@@ -257,6 +266,15 @@ struct ValueWriter<TWriter, stdb::memory::string>
     }
 };
 
+template <class TWriter>
+struct ValueWriter<TWriter, stdb::memory::arena_string>
+{
+    static bool to_json(TWriter& writer, const stdb::memory::arena_string& value, bool scope = true)
+    {
+        return writer.String(value.c_str());
+    }
+};
+
 template <class TWriter, std::size_t N>
 struct ValueWriter<TWriter, char[N]>
 {
@@ -427,6 +445,15 @@ template <class TJson>
 struct KeyReader<TJson, stdb::memory::string>
 {
     static bool from_json_key(const TJson& json, stdb::memory::string& key)
+    {
+        return FBE::JSON::from_json(json, key);
+    }
+};
+
+template <class TJson>
+struct KeyReader<TJson, stdb::memory::arena_string>
+{
+    static bool from_json_key(const TJson& json, stdb::memory::arena_string& key)
     {
         return FBE::JSON::from_json(json, key);
     }
@@ -751,6 +778,23 @@ template <class TJson>
 struct ValueReader<TJson, stdb::memory::string>
 {
     static bool from_json(const TJson& json, stdb::memory::string& value)
+    {
+        value = "";
+
+        // Schema validation
+        if (json.IsNull() || !json.IsString())
+            return false;
+
+        // Save the value
+        value.assign(json.GetString(), (size_t)json.GetStringLength());
+        return true;
+    }
+};
+
+template <class TJson>
+struct ValueReader<TJson, stdb::memory::arena_string>
+{
+    static bool from_json(const TJson& json, stdb::memory::arena_string& value)
     {
         value = "";
 

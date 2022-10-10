@@ -308,6 +308,108 @@ private:
 
 // Fast Binary Encoding field model string specialization
 template <>
+class FieldModel<std::pmr::string>
+{
+public:
+    FieldModel(FBEBuffer& buffer, size_t offset) noexcept : _buffer(buffer), _offset(offset) {}
+
+    // Get the field offset
+    size_t fbe_offset() const noexcept { return _offset; }
+    // Get the field size
+    size_t fbe_size() const noexcept { return 4; }
+    // Get the field extra size
+    size_t fbe_extra() const noexcept;
+
+    // Shift the current field offset
+    void fbe_shift(size_t size) noexcept { _offset += size; }
+    // Unshift the current field offset
+    void fbe_unshift(size_t size) noexcept { _offset -= size; }
+
+    // Check if the string value is valid
+    bool verify() const noexcept;
+
+    // Get the string value
+    size_t get(char* data, size_t size) const noexcept;
+    // Get the string value
+    template <size_t N>
+    size_t get(char (&data)[N]) const noexcept { return get(data, N); }
+    // Get the string value
+    template <size_t N>
+    size_t get(std::array<char, N>& data) const noexcept { return get(data.data(), data.size()); }
+    // Get the pmr string value
+    void get(std::pmr::string& value) const noexcept;
+    // Get the pmr string value
+    void get(std::pmr::string& value, const std::pmr::string& defaults) const noexcept;
+
+    // Set the string value
+    void set(const char* data, size_t size);
+    // Set the string value
+    template <size_t N>
+    void set(const char (&data)[N]) { set(data, N); }
+    // Set the string value
+    template <size_t N>
+    void set(const std::array<char, N>& data) { set(data.data(), data.size()); }
+    // Set the string value
+    void set(const std::pmr::string& value);
+
+private:
+    FBEBuffer& _buffer;
+    size_t _offset;
+};
+
+// Fast Binary Encoding field model string specialization
+template <>
+class FieldModel<stdb::memory::string>
+{
+public:
+    FieldModel(FBEBuffer& buffer, size_t offset) noexcept : _buffer(buffer), _offset(offset) {}
+
+    // Get the field offset
+    size_t fbe_offset() const noexcept { return _offset; }
+    // Get the field size
+    size_t fbe_size() const noexcept { return 4; }
+    // Get the field extra size
+    size_t fbe_extra() const noexcept;
+
+    // Shift the current field offset
+    void fbe_shift(size_t size) noexcept { _offset += size; }
+    // Unshift the current field offset
+    void fbe_unshift(size_t size) noexcept { _offset -= size; }
+
+    // Check if the string value is valid
+    bool verify() const noexcept;
+
+    // Get the string value
+    size_t get(char* data, size_t size) const noexcept;
+    // Get the string value
+    template <size_t N>
+    size_t get(char (&data)[N]) const noexcept { return get(data, N); }
+    // Get the string value
+    template <size_t N>
+    size_t get(std::array<char, N>& data) const noexcept { return get(data.data(), data.size()); }
+    // Get the pmr string value
+    void get(stdb::memory::string& value) const noexcept;
+    // Get the pmr string value
+    void get(stdb::memory::string& value, const stdb::memory::string& defaults) const noexcept;
+
+    // Set the string value
+    void set(const char* data, size_t size);
+    // Set the string value
+    template <size_t N>
+    void set(const char (&data)[N]) { set(data, N); }
+    // Set the string value
+    template <size_t N>
+    void set(const std::array<char, N>& data) { set(data.data(), data.size()); }
+    // Set the string value
+    void set(const stdb::memory::string& value);
+
+private:
+    FBEBuffer& _buffer;
+    size_t _offset;
+};
+
+// Fast Binary Encoding field model string specialization
+template <>
 class FieldModel<stdb::memory::arena_string>
 {
 public:
