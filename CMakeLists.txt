@@ -36,8 +36,6 @@ include(SystemInformation)
 find_package(BISON)
 find_package(FLEX)
 
-find_package(fmt)
-
 # Modules
 add_subdirectory("modules")
 
@@ -83,6 +81,12 @@ if(NOT FBEC_MODULE)
 
   # Proto FBE models
   file(GLOB FBE_FILES RELATIVE "${CMAKE_CURRENT_SOURCE_DIR}/proto" "proto/*.fbe")
+  file(GLOB FBE_FILE_ARENA RELATIVE "${CMAKE_CURRENT_SOURCE_DIR}/proto" "proto/arena_common.fbe")
+  file(GLOB FBE_FILE_ARENA_IMPORT RELATIVE "${CMAKE_CURRENT_SOURCE_DIR}/proto" "proto/arena.fbe")
+  list(REMOVE_ITEM FBE_FILES
+    ${FBE_FILE_ARENA}
+    ${FBE_FILE_ARENA_IMPORT}
+  )
   foreach(FBE_FILE ${FBE_FILES})
     string(REGEX REPLACE "(.*)\\.fbe" "\\1.h" FBE_HEADER ${FBE_FILE})
     set(FBE_INPUT_DIR "${CMAKE_CURRENT_SOURCE_DIR}/proto")
@@ -109,11 +113,38 @@ if(NOT FBEC_MODULE)
     list(APPEND PROTO_FILES ${FBE_OUTPUT_FILE})
   endforeach()
 
+  foreach(FBE_FILE ${FBE_FILE_ARENA} ${FBE_FILE_ARENA_IMPORT})
+    string(REGEX REPLACE "(.*)\\.fbe" "\\1.h" FBE_HEADER ${FBE_FILE})
+    set(FBE_INPUT_DIR "${CMAKE_CURRENT_SOURCE_DIR}/proto")
+    set(FBE_INPUT_FILE "${FBE_INPUT_DIR}/${FBE_FILE}")
+    set(FBE_OUTPUT_DIR "${CMAKE_CURRENT_SOURCE_DIR}/proto")
+    set(FBE_OUTPUT_FILE "${FBE_OUTPUT_DIR}/${FBE_HEADER}")
+    set(FBE_TARGET "${FBE_FILE}_TARGET")
+    add_custom_command(
+      OUTPUT ${FBE_OUTPUT_FILE}
+      COMMAND $<TARGET_FILE:fbec> --cpp --input ${FBE_INPUT_FILE} --output ${FBE_OUTPUT_DIR} --arena
+      DEPENDS ${FBE_INPUT_FILE} COMMENT "Generating FBE proto for ${FBE_INPUT_FILE}..." VERBATIM
+    )
+    add_custom_target(${FBE_TARGET} DEPENDS ${FBE_OUTPUT_FILE})
+    set_target_properties(${FBE_TARGET} PROPERTIES FOLDER "proto")
+    list(APPEND PROTO_DEPENDENCIES ${FBE_TARGET})
+    list(APPEND PROTO_FILES ${FBE_OUTPUT_FILE})
+  endforeach()
+
   # Proto ptr-based FBE models
   file(GLOB FBE_FILE_PTR_IMPORT RELATIVE "${CMAKE_CURRENT_SOURCE_DIR}/ptr_proto" "ptr_proto/ptrpkg.fbe")
+  file(GLOB FBE_FILE_PTR_ARENA RELATIVE "${CMAKE_CURRENT_SOURCE_DIR}/ptr_proto" "ptr_proto/arena_common_ptr.fbe")
+  file(GLOB FBE_FILE_PTR_ARENA_IMPORT RELATIVE "${CMAKE_CURRENT_SOURCE_DIR}/ptr_proto" "ptr_proto/arena_ptr.fbe")
   file(GLOB FBE_FILE_TEMPLATE_IMPORT RELATIVE "${CMAKE_CURRENT_SOURCE_DIR}/ptr_proto" "ptr_proto/template_variant.fbe")
+  file(GLOB FBE_FILE_ARENA_TEMPLATE_IMPORT RELATIVE "${CMAKE_CURRENT_SOURCE_DIR}/ptr_proto" "ptr_proto/template_arena.fbe")
   file(GLOB FBE_FILES RELATIVE "${CMAKE_CURRENT_SOURCE_DIR}/ptr_proto" "ptr_proto/*.fbe")
-  list(REMOVE_ITEM FBE_FILES ${FBE_FILE_PTR_IMPORT} ${FBE_FILE_TEMPLATE_IMPORT})
+  list(REMOVE_ITEM FBE_FILES
+    ${FBE_FILE_PTR_IMPORT}
+    ${FBE_FILE_PTR_ARENA}
+    ${FBE_FILE_PTR_ARENA_IMPORT}
+    ${FBE_FILE_TEMPLATE_IMPORT}
+    ${FBE_FILE_ARENA_TEMPLATE_IMPORT}
+  )
   foreach(FBE_FILE ${FBE_FILES})
     string(REGEX REPLACE "(.*)\\.fbe" "\\1.h" FBE_HEADER ${FBE_FILE})
     set(FBE_INPUT_DIR "${CMAKE_CURRENT_SOURCE_DIR}/ptr_proto")
@@ -150,23 +181,59 @@ if(NOT FBEC_MODULE)
     list(APPEND PROTO_FILES ${FBE_OUTPUT_FILE})
   endforeach()
 
+  foreach(FBE_FILE ${FBE_FILE_PTR_ARENA} ${FBE_FILE_ARENA_TEMPLATE_IMPORT})
+    string(REGEX REPLACE "(.*)\\.fbe" "\\1.h" FBE_HEADER ${FBE_FILE})
+    set(FBE_INPUT_DIR "${CMAKE_CURRENT_SOURCE_DIR}/ptr_proto")
+    set(FBE_INPUT_FILE "${FBE_INPUT_DIR}/${FBE_FILE}")
+    set(FBE_OUTPUT_DIR "${CMAKE_CURRENT_SOURCE_DIR}/proto")
+    set(FBE_OUTPUT_FILE "${FBE_OUTPUT_DIR}/${FBE_HEADER}")
+    set(FBE_TARGET "${FBE_FILE}_PTR_TARGET")
+    add_custom_command(
+      OUTPUT ${FBE_OUTPUT_FILE}
+      COMMAND $<TARGET_FILE:fbec> --cpp --ptr --input ${FBE_INPUT_FILE} --output ${FBE_OUTPUT_DIR} --arena
+      DEPENDS ${FBE_INPUT_FILE} COMMENT "Generating FBE proto for ${FBE_INPUT_FILE}..." VERBATIM
+    )
+    add_custom_target(${FBE_TARGET} DEPENDS ${FBE_OUTPUT_FILE})
+    set_target_properties(${FBE_TARGET} PROPERTIES FOLDER "proto")
+    list(APPEND PROTO_DEPENDENCIES ${FBE_TARGET})
+    list(APPEND PROTO_FILES ${FBE_OUTPUT_FILE})
+  endforeach()
+
+  foreach(FBE_FILE ${FBE_FILE_PTR_ARENA_IMPORT})
+    string(REGEX REPLACE "(.*)\\.fbe" "\\1.h" FBE_HEADER ${FBE_FILE})
+    set(FBE_INPUT_DIR "${CMAKE_CURRENT_SOURCE_DIR}/ptr_proto")
+    set(FBE_INPUT_FILE "${FBE_INPUT_DIR}/${FBE_FILE}")
+    set(FBE_OUTPUT_DIR "${CMAKE_CURRENT_SOURCE_DIR}/proto")
+    set(FBE_OUTPUT_FILE "${FBE_OUTPUT_DIR}/${FBE_HEADER}")
+    set(FBE_TARGET "${FBE_FILE}_PTR_TARGET")
+    add_custom_command(
+      OUTPUT ${FBE_OUTPUT_FILE}
+      COMMAND $<TARGET_FILE:fbec> --cpp --import-ptr --ptr --input ${FBE_INPUT_FILE} --output ${FBE_OUTPUT_DIR} --arena
+      DEPENDS ${FBE_INPUT_FILE} COMMENT "Generating FBE proto for ${FBE_INPUT_FILE}..." VERBATIM
+    )
+    add_custom_target(${FBE_TARGET} DEPENDS ${FBE_OUTPUT_FILE})
+    set_target_properties(${FBE_TARGET} PROPERTIES FOLDER "proto")
+    list(APPEND PROTO_DEPENDENCIES ${FBE_TARGET})
+    list(APPEND PROTO_FILES ${FBE_OUTPUT_FILE})
+  endforeach()
+
   foreach(FBE_FILE ${FBE_FILE_TEMPLATE_IMPORT})
-  string(REGEX REPLACE "(.*)\\.fbe" "\\1.h" FBE_HEADER ${FBE_FILE})
-  set(FBE_INPUT_DIR "${CMAKE_CURRENT_SOURCE_DIR}/ptr_proto")
-  set(FBE_INPUT_FILE "${FBE_INPUT_DIR}/${FBE_FILE}")
-  set(FBE_OUTPUT_DIR "${CMAKE_CURRENT_SOURCE_DIR}/proto")
-  set(FBE_OUTPUT_FILE "${FBE_OUTPUT_DIR}/${FBE_HEADER}")
-  set(FBE_TARGET "${FBE_FILE}_PTR_TARGET")
-  add_custom_command(
-    OUTPUT ${FBE_OUTPUT_FILE}
-    COMMAND $<TARGET_FILE:fbec> --cpp --ptr --input ${FBE_INPUT_FILE} --output ${FBE_OUTPUT_DIR}
-    DEPENDS ${FBE_INPUT_FILE} COMMENT "Generating FBE proto for ${FBE_INPUT_FILE}..." VERBATIM
-  )
-  add_custom_target(${FBE_TARGET} DEPENDS ${FBE_OUTPUT_FILE})
-  set_target_properties(${FBE_TARGET} PROPERTIES FOLDER "proto")
-  list(APPEND PROTO_DEPENDENCIES ${FBE_TARGET})
-  list(APPEND PROTO_FILES ${FBE_OUTPUT_FILE})
-endforeach()
+    string(REGEX REPLACE "(.*)\\.fbe" "\\1.h" FBE_HEADER ${FBE_FILE})
+    set(FBE_INPUT_DIR "${CMAKE_CURRENT_SOURCE_DIR}/ptr_proto")
+    set(FBE_INPUT_FILE "${FBE_INPUT_DIR}/${FBE_FILE}")
+    set(FBE_OUTPUT_DIR "${CMAKE_CURRENT_SOURCE_DIR}/proto")
+    set(FBE_OUTPUT_FILE "${FBE_OUTPUT_DIR}/${FBE_HEADER}")
+    set(FBE_TARGET "${FBE_FILE}_PTR_TARGET")
+    add_custom_command(
+      OUTPUT ${FBE_OUTPUT_FILE}
+      COMMAND $<TARGET_FILE:fbec> --cpp --ptr --input ${FBE_INPUT_FILE} --output ${FBE_OUTPUT_DIR}
+      DEPENDS ${FBE_INPUT_FILE} COMMENT "Generating FBE proto for ${FBE_INPUT_FILE}..." VERBATIM
+    )
+    add_custom_target(${FBE_TARGET} DEPENDS ${FBE_OUTPUT_FILE})
+    set_target_properties(${FBE_TARGET} PROPERTIES FOLDER "proto")
+    list(APPEND PROTO_DEPENDENCIES ${FBE_TARGET})
+    list(APPEND PROTO_FILES ${FBE_OUTPUT_FILE})
+  endforeach()
 
   # Proto library
   file(GLOB_RECURSE PROTO_HEADER_FILES "proto/*.h")

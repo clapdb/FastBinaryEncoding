@@ -1,0 +1,3 @@
+package template_arena
+
+import arena_common
