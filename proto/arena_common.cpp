@@ -51,7 +51,7 @@ Alias::Alias()
 {}
 
 Alias::Alias([[maybe_unused]] allocator_type alloc)
-    : name()
+    : name(alloc)
     , optr()
     , expr()
 {}
@@ -104,7 +104,7 @@ Expression::Expression()
 {}
 
 Expression::Expression([[maybe_unused]] allocator_type alloc)
-    : keys()
+    : keys(alloc)
     , aliases(alloc)
     , alias_int(alloc)
 {}

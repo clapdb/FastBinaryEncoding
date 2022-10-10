@@ -1971,20 +1971,21 @@ void GeneratorCpp::GeneratePtrStruct_Source(const std::shared_ptr<Package>& p, c
             {
                 WriteIndent();
                 Write(std::string(first ? ": " : ", ") + *field->name + "(");
-                if (field->optional) {
+                // priority: container > optional > imported type > ptr > bytes/string/primitive type/custom type > variant
+                if (IsContainerType(*field)) {
+                    Write("alloc");
+                } else if (field->optional) {
                     Write("std::nullopt");
                 } else if (!IsCurrentPackageType(*field->type)) {
                     Write(std::string("assign_member<") + ConvertTypeName(*p->name, *field) + ">(alloc)");
-                } else if (field->ptr && !IsContainerType(*field)) {
+                } else if (field->ptr) {
                     Write("nullptr");
-                } else if (*field->type == "string") {
-                // container should be initialized with memory_resource
-                } else if (*field->type == "bytes" || IsContainerType(*field)) {
+                } else if (*field->type == "bytes" || *field->type == "string") {
                     Write("alloc");
                 } else if (field->value || IsPrimitiveType(*field->type, field->optional)) {
                     Write(ConvertDefault(*p->name, *field));
                 // only struct(no optional or enum) should be initialized with arena
-                } else if (!IsVariantType(p, *field->type) && !field->optional && *field->type != "bytes" && std::find_if(enums.begin(), enums.end(),
+                } else if (!IsVariantType(p, *field->type) && std::find_if(enums.begin(), enums.end(),
                  [t = *field->type](const std::shared_ptr<EnumType>& e) -> bool { 
                      return *e->name == t; }) == enums.end()) {
                     Write("alloc");

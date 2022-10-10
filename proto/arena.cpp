@@ -19,8 +19,8 @@ Item::Item()
 Item::Item([[maybe_unused]] allocator_type alloc)
     : optr(assign_member<::arena_common::Optr>(alloc))
     , alias(assign_member<::arena_common::Alias>(alloc))
-    , expressions(assign_member<std::pmr::vector<::arena_common::Expression>>(alloc))
-    , aliases_int(assign_member<std::pmr::map<int32_t, ::arena_common::Alias>>(alloc))
+    , expressions(alloc)
+    , aliases_int(alloc)
 {}
 
 Item::Item(const ::arena_common::Optr& arg_optr, const ::arena_common::Alias& arg_alias, const std::pmr::vector<::arena_common::Expression>& arg_expressions, const std::pmr::map<int32_t, ::arena_common::Alias>& arg_aliases_int)

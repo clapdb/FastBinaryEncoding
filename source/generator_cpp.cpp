@@ -9357,16 +9357,18 @@ void GeneratorCpp::GenerateStruct_Source(const std::shared_ptr<Package>& p, cons
             {
                 WriteIndent();
                 Write(std::string(first ? ": " : ", ") + *field->name + "(");
-                if (field->optional) {
+                // priority: container > optional > imported type > bytes/string/primitive type/custom type > variant
+                if (IsContainerType(*field)) {
+                    Write("alloc");
+                } else if (field->optional) {
                     Write("std::nullopt");
                 } else if (!IsCurrentPackageType(*field->type)) {
                     Write(std::string("assign_member<") + ConvertTypeName(*p->name, *field) + ">(alloc)");
-                } else if (*field->type == "string") {
-                } else if (*field->type == "bytes" || IsContainerType(*field)) {
+                } else if (*field->type == "bytes" || *field->type == "string") {
                     Write("alloc");
                 } else if (field->value || IsPrimitiveType(*field->type, field->optional)) {
                     Write(ConvertDefault(*p->name, *field));
-                } else if (!IsVariantType(p, *field->type) && !field->optional && *field->type != "bytes" && std::find_if(enums.begin(), enums.end(),
+                } else if (!IsVariantType(p, *field->type) && std::find_if(enums.begin(), enums.end(),
                  [t = *field->type](const std::shared_ptr<EnumType>& e) -> bool { 
                      return *e->name == t; }) == enums.end()) {
                     Write("alloc");
