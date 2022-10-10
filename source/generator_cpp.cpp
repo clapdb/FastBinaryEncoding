@@ -6670,7 +6670,6 @@ struct KeyReader<TJson, stdb::memory::arena_string>
     }
 };
 
-t
 template <class TJson>
 struct KeyReader<TJson, FBE::decimal_t>
 {
