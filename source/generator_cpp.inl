@@ -2164,7 +2164,7 @@ void GeneratorCpp::GeneratePtrStruct_Source(const std::shared_ptr<Package>& p, c
                 WriteLineIndent("delete it.second;");
                 Indent(-1);
             } else if (field->vector || field->list) {
-                WriteLineIndent("for (auto& it : " + *field->name + ")");
+                WriteLineIndent("for (auto* it : " + *field->name + ")");
                 Indent(1);
                 WriteLineIndent("delete it;");
                 Indent(-1);

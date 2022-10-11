@@ -47,7 +47,7 @@ Simple::Simple([[maybe_unused]] Simple&& other) noexcept
 Simple::~Simple()
 {
     if (simple) delete simple;
-    for (auto& it : spv)
+    for (auto* it : spv)
         delete it;
     for (auto& it: spm)
         delete it.second;

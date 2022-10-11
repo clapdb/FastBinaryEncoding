@@ -38,9 +38,9 @@ Info::Info([[maybe_unused]] Info&& other) noexcept
 Info::~Info()
 {
     if (extra) delete extra;
-    for (auto& it : extras)
+    for (auto* it : extras)
         delete it;
-    for (auto& it : extras1)
+    for (auto* it : extras1)
         delete it;
 }
 
@@ -156,9 +156,9 @@ Extra::~Extra()
 {
     if (info) delete info;
     if (info2) delete info2;
-    for (auto& it : infopv)
+    for (auto* it : infopv)
         delete it;
-    for (auto& it : infopl)
+    for (auto* it : infopl)
         delete it;
 }
 
