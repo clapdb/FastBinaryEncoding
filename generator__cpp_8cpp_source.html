@@ -2129,11 +2129,11 @@ $(function() {
 <div class="line"><a name="l02120"></a><span class="lineno"> 2120</span>&#160;<span class="stringliteral"></span> </div>
 <div class="line"><a name="l02121"></a><span class="lineno"> 2121</span>&#160;<span class="stringliteral">        flags |= (uint32_t)iPower &lt;&lt; 16;</span></div>
 <div class="line"><a name="l02122"></a><span class="lineno"> 2122</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l02123"></a><span class="lineno"> 2123</span>&#160;<span class="stringliteral">        *((uint64_t*)(_buffer.data() + _buffer.offset() + fbe_offset())) = ulMant;</span></div>
-<div class="line"><a name="l02124"></a><span class="lineno"> 2124</span>&#160;<span class="stringliteral">        *((uint32_t*)(_buffer.data() + _buffer.offset() + fbe_offset() + 8)) = 0;</span></div>
+<div class="line"><a name="l02123"></a><span class="lineno"> 2123</span>&#160;<span class="stringliteral">        unaligned_store&lt;uint64_t&gt;(_buffer.data() + _buffer.offset() + fbe_offset(), ulMant);</span></div>
+<div class="line"><a name="l02124"></a><span class="lineno"> 2124</span>&#160;<span class="stringliteral">        unaligned_store&lt;uint32_t&gt;(_buffer.data() + _buffer.offset() + fbe_offset() + 8, 0);</span></div>
 <div class="line"><a name="l02125"></a><span class="lineno"> 2125</span>&#160;<span class="stringliteral">    }</span></div>
 <div class="line"><a name="l02126"></a><span class="lineno"> 2126</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l02127"></a><span class="lineno"> 2127</span>&#160;<span class="stringliteral">    *((uint32_t*)(_buffer.data() + _buffer.offset() + fbe_offset() + 12)) = flags;</span></div>
+<div class="line"><a name="l02127"></a><span class="lineno"> 2127</span>&#160;<span class="stringliteral">    unaligned_store&lt;uint32_t&gt;(_buffer.data() + _buffer.offset() + fbe_offset() + 12, flags);</span></div>
 <div class="line"><a name="l02128"></a><span class="lineno"> 2128</span>&#160;<span class="stringliteral">}</span></div>
 <div class="line"><a name="l02129"></a><span class="lineno"> 2129</span>&#160;<span class="stringliteral">)CODE&quot;;</span></div>
 <div class="line"><a name="l02130"></a><span class="lineno"> 2130</span>&#160;<span class="stringliteral"></span> </div>
