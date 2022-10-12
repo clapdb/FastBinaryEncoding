@@ -265,6 +265,8 @@ if(NOT FBEC_MODULE)
     list(APPEND INSTALL_TARGETS_PDB ${EXAMPLE_TARGET})
   endforeach()
 
+  add_custom_target(fbec_all DEPENDS ${PROTO_DEPENDENCIES})
+
   # Benchmarks
   file(GLOB BENCHMARK_HEADER_FILES "performance/*.h")
   file(GLOB BENCHMARK_INLINE_FILES "performance/*.inl")
