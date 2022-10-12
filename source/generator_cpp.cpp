@@ -2120,11 +2120,11 @@ void FieldModel<decimal_t>::set(decimal_t value) noexcept
 
         flags |= (uint32_t)iPower << 16;
 
-        *((uint64_t*)(_buffer.data() + _buffer.offset() + fbe_offset())) = ulMant;
-        *((uint32_t*)(_buffer.data() + _buffer.offset() + fbe_offset() + 8)) = 0;
+        unaligned_store<uint64_t>(_buffer.data() + _buffer.offset() + fbe_offset(), ulMant);
+        unaligned_store<uint32_t>(_buffer.data() + _buffer.offset() + fbe_offset() + 8, 0);
     }
 
-    *((uint32_t*)(_buffer.data() + _buffer.offset() + fbe_offset() + 12)) = flags;
+    unaligned_store<uint32_t>(_buffer.data() + _buffer.offset() + fbe_offset() + 12, flags);
 }
 )CODE";
 

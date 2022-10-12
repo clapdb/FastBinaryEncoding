@@ -49,11 +49,11 @@ struct Line : FBE::Base
     Line();
     explicit Line(allocator_type alloc);
     explicit Line(::arena_common::Expression&& arg_expression);
-    Line(const Line& other) = delete;
+    Line(const Line& other) = default;
     Line(Line&& other) noexcept;
     ~Line() override;
 
-    Line& operator=(const Line& other) = delete;
+    Line& operator=(const Line& other) = default;
     Line& operator=(Line&& other) noexcept;
 
     bool operator==(const Line& other) const noexcept;
@@ -99,11 +99,11 @@ struct Line2 : FBE::Base
     Line2();
     explicit Line2(allocator_type alloc);
     explicit Line2(const FBE::pmr_buffer_t& arg_bytes_v);
-    Line2(const Line2& other) = delete;
+    Line2(const Line2& other) = default;
     Line2(Line2&& other) noexcept;
     ~Line2() override;
 
-    Line2& operator=(const Line2& other) = delete;
+    Line2& operator=(const Line2& other) = default;
     Line2& operator=(Line2&& other) noexcept;
 
     bool operator==(const Line2& other) const noexcept;
